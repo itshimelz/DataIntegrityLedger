@@ -1,0 +1,155 @@
+// ponytail: standard node:crypto RSA-2048 key generator and deterministic seed keypairs for demo faculty
+
+import { generateKeyPairSync } from "node:crypto"
+import type { KeyPair } from "../types"
+
+/**
+ * Generates a fresh RSA-2048 keypair in PEM format.
+ */
+export function generateRsaKeyPair(): KeyPair {
+  const { publicKey, privateKey } = generateKeyPairSync("rsa", {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: "spki",
+      format: "pem",
+    },
+    privateKeyEncoding: {
+      type: "pkcs8",
+      format: "pem",
+    },
+  })
+
+  return { publicKey, privateKey }
+}
+
+// Pre-seeded faculty IDs
+export const FACULTY_ID_MAMUN = "fac-mamun-001"
+export const FACULTY_ID_SHARIFUR = "fac-sharifur-002"
+export const FACULTY_ID_MAHBUBUR = "fac-mahbubur-003"
+
+// Pre-generated RSA-2048 keys for deterministic demo seeding
+export const DEMO_FACULTY_KEYS: Record<string, KeyPair> = {
+  [FACULTY_ID_MAMUN]: {
+    publicKey: `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+qLhJjw0c/ebyGmgv5Ss
+WeQn6FmkaB0t8zAWJ/OfHq852ds/Dz3bmNl4rvMUIEfHJrFcWoBuZ9T6r3G6KOh3
+JEr3dUT77X73n+4SphR06+fcEn3/LDfgS9d84iJuGtPeXPB6NttnslQYR7xI0n9U
+fE6+VTdV4u1hqI5Ko8XJs7J+ff+Yy7Sjb/99eIYReQSfsCPUwHYmv+FMW7mPGSaU
+xnT0JltlPedEjPQt6ppcp0Ksg0uc1smONJ46yxF2g4SkEjOQB4sog9aXArbOLlqM
+L0zw3agGBfop18C+MYkPMnBqBIWazYzegjGaAILWiCJ63dFzRiAOIKLyhGPfT2uG
+2wIDAQAB
+-----END PUBLIC KEY-----
+`,
+    privateKey: `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD6ouEmPDRz95vI
+aaC/lKxZ5CfoWaRoHS3zMBYn858erznZ2z8PPduY2Xiu8xQgR8cmsVxagG5n1Pqv
+cboo6HckSvd1RPvtfvef7hKmFHTr59wSff8sN+BL13ziIm4a095c8Ho222eyVBhH
+vEjSf1R8Tr5VN1Xi7WGojkqjxcmzsn59/5jLtKNv/314hhF5BJ+wI9TAdia/4Uxb
+uY8ZJpTGdPQmW2U950SM9C3qmlynQqyDS5zWyY40njrLEXaDhKQSM5AHiyiD1pcC
+ts4uWowvTPDdqAYF+inXwL4xiQ8ycGoEhZrNjN6CMZoAgtaIInrd0XNGIA4govKE
+Y99Pa4bbAgMBAAECggEAa26Auq5ov2KdzFB2flggbmGNN5uhDJ2hUhHFFXfoNzNd
+xUOkqohVxhVFlRwNfu61byDsGMDfUjNpBuXlKV7Hnu9hVcttfzYCt3NJXBX9rhbS
+7rxCMfZ7dpbV6WpfrrEtKcJMaJIwRzCjva/3uP6qPKRWElnnPx+IUkM3vC5uEE8z
+nj/AlBfFwF1SYBsFMmncxZL00bu551qxBhHja7rUuqfH2BuBMi2DUOzSR/mfhc8z
+KjWRHX47+UahkJEa1U3RHe3veH6DGHQgTJ4ewHuR6j9sbQQvEMe2Hh7txokBpCZy
+CioUdohZmsOracfY0h5HwSNd8NyATEV5kkzJ16dlqQKBgQD/vCktuPWEArvaBfog
+38fvQMHS2bYEZ4vV9RTnG0F4ajSyiSbqbJDBZUviwh9ucpURU/L9qGurDQ7fV4wy
+21W3wPJirPHSTQFnUVDOLrUYHcq6UEyFFZo7cF8XkLt/JgzIx7Dh+/ZQluPg9AB7
+9DcRu039wBPKnzHXDDpr7yLF2QKBgQD65V23lV7Gs12q8+YK6cckeh7aqKKoGyb+
+/EDdEd+C3Byn9Hf5FjxGnN0t8FuyCGHLdAQCK98CxIgi9khVzUuAoDy2cUuVS5Of
+4JUGUCOhIlw1wV1hVcvTk5MsG5JgTuCdLBR8KA8qKWzJp0GIFZMwKkgDhYGWq0ld
+2eDPHjP90wKBgQDBEgdss4T4IzA7i+OpSgmiAZvTWfZnIN2brKoZSKSHCne6in1M
+4qXuvFEsYy5jrjIIoP6ErtCKlRMzXt9Dzf/K+OqFwNfY07ZJkESXRQAHswZI3zLG
+DucgFNhV7DkB53Ija0+JbTYq5aApR03ORzQEOQrKlmbaxJFWL68zqZjxEQKBgAFn
+rWmsxXYZZQnjCcO/4WSb5nZVAWwtkr9UzEwwoG7MKsDqBo33iOjgUgDC2tCZaWrJ
+QIh+lGYgkZ6YgHkyiBy1SQHAiqrQXIhFqq/5XOm3FosahRpZb6XEqstRcDVn26wl
+pgu38bXLu5c5f41yiXt4kSSr57jfRq7m3HJseeAPAoGBANXriv8zIEglcJFo5vmR
+3/V23HK3STovWmPsxemyciT/EyUXKDjYDNuYY2T+o1yUVleNMwac+66k7Ighsvbh
+pNvVszpgEggsyIbLEoTOeCWrfF/J/7FeGp3PX3lN/VKB4/06sJ5LtsPmYdFPw8tk
+8btZY9blRns/L9qw9ZiErybT
+-----END PRIVATE KEY-----
+`,
+  },
+  [FACULTY_ID_SHARIFUR]: {
+    publicKey: `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuAj81iDJojJ9rd06xEtx
+g5XtME8ixduaoZELJtsweZm9isSERQXQzDpn0tk3+0lHYn4kvmUqjEbcB73Yp9Ri
+MMb6qL+l7fT5XmjDiN8GiPsUV4Qo3fouJizm52TRTCOIfgU4sI5e+KHoTV7Y8zWT
+S/j9rzBeXdKpnW3fFlfX+v62p4LgDGuNt0KcN1lEMoJVJyAvtyzzD0KfpccfzLSJ
+WVhxl2zGjl2ujn3lSOJ3l2f/IeG131xh56oChpo5SBLdjdxjXeYX6YqNdKyyv84l
+WoX6Fqmz1eUpqhQsy8jjkQL1KCtwXD0J5/A+UG9IUZ7r2+G92kxeuOaVxsGhZiXU
+FQIDAQAB
+-----END PUBLIC KEY-----
+`,
+    privateKey: `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC4CPzWIMmiMn2t
+3TrES3GDle0wTyLF25qhkQsm2zB5mb2KxIRFBdDMOmfS2Tf7SUdifiS+ZSqMRtwH
+vdin1GIwxvqov6Xt9PleaMOI3waI+xRXhCjd+i4mLObnZNFMI4h+BTiwjl74oehN
+XtjzNZNL+P2vMF5d0qmdbd8WV9f6/ranguAMa423Qpw3WUQyglUnIC+3LPMPQp+l
+xx/MtIlZWHGXbMaOXa6OfeVI4neXZ/8h4bXfXGHnqgKGmjlIEt2N3GNd5hfpio10
+rLK/ziVahfoWqbPV5SmqFCzLyOORAvUoK3BcPQnn8D5Qb0hRnuvb4b3aTF645pXG
+waFmJdQVAgMBAAECggEAB2Fi5GJ5u527QRD9dZhR89U8JyMRUa6CJ8cVk6gYLFRA
+T/OcG1mFm18fQUsxTcxNRtOovRL5DxmbYtsX+HkRvAOK02AmMyIPKxxX9SH+lNk+
+4licO/S3y5Oi6fY2148YPveOI7R99gomMw4h9LT6FIKmh9NQgYI8h6H7n52DvZ7O
+d5RbC01EZuiofhaoGc+OdxLrBcowBhNfIOtSPncGqe+BEkXnvUUkD6w7HXqFdLQe
+rE75CnFvV5wEj9jJLQ062IHfrb3AQR2P+Mnc+/mKwnWnmWwWaPbxMfhEDDevNcQy
+cRWEvFheTAlu31F+JB2jg4AAoatKJ40t4PbOBdABEQKBgQDpOlaAjFm1PfDTfYso
+2QKDw+SIx00Unwnb9AGx7Kcf8sd1ZaYqAInX7Ych9XQ32NvBkhe8dRc2BeWH3o2J
+mj7ru7a7gHXkFT4TPIBWqg3N/uPi8EO3gkDJBpam1xDnaItDUtL59TKgirAAKWjt
+1dfvQuUDyZu3dkOSNHo5AOhOxQKBgQDKAQx2IZUmTmhRdLUUgpzK+H2PcU2J6lnp
+C2lRjTu9H1kl55sFu382IFz75ZImAgp2c7851MhxcqThI0eKOA1fsWXytUppErpK
+gaGhhl8JdaXun22TOTxiTZWg/Kimqs1XLByBCGEDdyNGMCUpQozMzs0I/mkHzWdi
+uGs0a1/FEQKBgCHapv3H4amuUQvR+GY4geXwhHbaPzUUFNFJrQlPqb64df1zgNgt
+9dRTFT93qqQEpXmGpE1lzbW4y2Wah38G1cVQHSlAb1xpPPZ73ME3tANH0Xp6l8nG
+bXMAstOK+lgs07I1Dozb67pkB0IuwJ1tYgfH9QhEtoa98vcBCRDHMfFlAoGBAMnn
+Am2QY2NGOz4vSE6Xvd+hPt6AgN+4POWRYlMAtxTwoEoik+/G1/9hmY6shsc2gv6h
+8h/7bdz2mZXtjTO5kqRyy1MroJQlA840gzjO9W6fCJrY/syICLK4mTWvU2JClbrr
+fBH8LfsouTkOJhZ3TgPnL0guAQyrYQprCbv7Fl4BAoGAOof1VYB6R7YbmyXANWBk
+co3dpk4Um0uG3G/3+TYTnWUklyEWOLu7Z1qN7AwgJl9Ak9WBrrjDgLXYO9tEDiQJ
+EypVwKqZVuv3Eet9Qqd8FXVbJaJfhVLYYXbdDqitDdbW0hSs9FZFsng/2v/T4PWh
+JyLTTNX6NcH9aQMEEty0HlU=
+-----END PRIVATE KEY-----
+`,
+  },
+  [FACULTY_ID_MAHBUBUR]: {
+    publicKey: `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArbgaecbbJvpk/oQhAa+r
+IYC5zlWw9t9Nd2k6vIEAhdjtmlzYjbsS1ZsSjNXQrmnGFXAtLK3N8APCuunfGExN
+LfXZjM0hFzHY/wbHPsje5gOKo+4Gw0tk6EoPQ35RoBFE/Ngsus6uDzy5xWsd1bVc
+lfc9KZ6bTVrGfrdZ/yoHsr4aloD7AIiUCvcOcwCSV1iL+4ezYGuWgKTNsVmxfODj
+wK75Iz2D1jJrdDOzwJ5U7seT7cGlvZApha4g3tXtuBZS3jCj5WFMPLe6uwhCl1R8
+geceEkiR92WgTShHtL/LshEo4Mx/Ti6KLqMsAmrzm9Wy4Rd7fZ1X78nieGPlXFos
+BQIDAQAB
+-----END PUBLIC KEY-----
+`,
+    privateKey: `-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtuBp5xtsm+mT+
+hCEBr6shgLnOVbD23013aTq8gQCF2O2aXNiNuxLVmxKM1dCuacYVcC0src3wA8K6
+6d8YTE0t9dmMzSEXMdj/Bsc+yN7mA4qj7gbDS2ToSg9DflGgEUT82Cy6zq4PPLnF
+ax3VtVyV9z0pnptNWsZ+t1n/KgeyvhqWgPsAiJQK9w5zAJJXWIv7h7Nga5aApM2x
+WbF84OPArvkjPYPWMmt0M7PAnlTux5PtwaW9kCmFriDe1e24FlLeMKPlYUw8t7q7
+CEKXVHyB5x4SSJH3ZaBNKEe0v8uyESjgzH9OLoouoywCavOb1bLhF3t9nVfvyeJ4
+Y+VcWiwFAgMBAAECggEAH8kGBR6atirOBFi6LlQNYJusQ6Hft4f7pVvqbJfA9/yN
+Wvdegy5Fv7I4Rm8P1/3QCdek2F4zxlT10hvdH1XEsGJhrBbTVWpgPSdpGOaJjDX9
+LcntUFnw7GSynsOT3VETmZzXMFYFOJIAnqvfAV2GA4WBmiYkXda8Z26WZ67xyiUb
+sJjoxWBh115HkIkkBLhBuuma5Poi6vdKCv5VcLJo4ZAT936O2gNIfkA/2mxziRM0
+E26A4PcFoPIjEUWqe/i47mtvBrOIMjV6t2zPgA3KtDGo7YbicwwEADVWNIYVoqhV
+z2wKldhntvlZkrWXfKywxtYrR68gBD/vj5t2u6mE2QKBgQDeq8dK2JXHacnJUbYm
+HC0WH1BazY3mvhxNJtl023jvqyS7vpmYkgLChOJ9Qrsc9PakZJD1E/G83rkHIVMx
+dy+VSb/U/qyF7Biu14GRMpt5OoPJRqZPkKPv8GYtQd+J2FYqCEDkZZnO+AG4w0Ne
+SYoiPZA+PJ/zsM//Aub7JLQqnQKBgQDHuJtPukafAyewUO6GeM8QPGAKhpQ6LF2v
+y830HkjJqLx3wmztcqC5OojvxRMGae97lPDqD0zpjfqXnuQxZbfrTQKXH9LqifMz
+NypL51b3wu0kIGtuOhA8X9NDq81P4Hzt+YmzFqxn7FnjPeQ6iPBxjz4d5pseSc/M
+QHOP6gd2iQKBgDByaXsEYpovjyLJL3tdOAYPLBmFjbE9fcTfhgKh2c8zilt63cpP
+QmB2Lx0XzsQ/HAaqhst72mXAg7tkachiaSzvDdjWzEybEMfBxcQEocUfkRrSz06S
+ZsjGokSIh41jT2P3xb6ryGo6lY1QlrDGCVLn2CFiaV7JAog2ZnEQDE8VAoGAPJuZ
+BijRJZAfizIEMGqY66RmwMr2UHEGPULrzRkjnY7HItCtnaEbhRpuU9TKYTfkpOwd
+7+mUvYuIcFqXhSYJGi7Uimft6Z7TXsdu3nnlumo87Kmp8FlOdAPgaLjKJWNKhi0j
+zGUlDKR84qj1iY3k6ZE+mHRSvm5H0QP+Db5HZYECgYBynRFh2t8bxTwPdyMy3FHa
+I4vNi1kVuqWBahEBxdTD3YjTaADLDoSg0IuNDh9yEh+MzwKX5zz4beG1JADif7ih
+UmKoryZuP8oKl7f/TUXqEpMiKrVbTDydUIE2VlejTJH0I8581IJrKupp+pqVeaR/
+K3NigJpBjyNsF0cYhl2iPg==
+-----END PRIVATE KEY-----
+`,
+  },
+}

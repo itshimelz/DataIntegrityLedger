@@ -1,19 +1,42 @@
-import { Button } from "@/components/ui/button"
+import React from "react"
+import { Shell } from "@/components/layout/shell"
+import { StatCards } from "@/components/dashboard/stat-cards"
+import { ChainHealthWidget } from "@/components/dashboard/chain-health-widget"
+import { DemoControls } from "@/components/dashboard/demo-controls"
+import { RecentRecords } from "@/components/dashboard/recent-records"
+import { TamperAlert } from "@/components/verification/tamper-alert"
 
-export default function Page() {
+export default function DashboardPage() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
+    <Shell>
+      <div className="space-y-6">
+        {/* Page Header */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="font-heading text-xl font-bold tracking-wider uppercase text-foreground md:text-2xl">
+              Registrar Grade Ledger Overview
+            </h1>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Tamper-evident academic records authenticated with SHA-256 hash chaining and RSA-2048 faculty signatures.
+            </p>
+          </div>
         </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
+
+        {/* Prominent Tamper Alert if Compromised */}
+        <TamperAlert />
+
+        {/* Top Metric Stat Cards */}
+        <StatCards />
+
+        {/* Chain Health Visual Timeline */}
+        <ChainHealthWidget />
+
+        {/* Interactive Demo & Action Controls */}
+        <DemoControls />
+
+        {/* Recent Ledger Entries Snapshot */}
+        <RecentRecords />
       </div>
-    </div>
+    </Shell>
   )
 }

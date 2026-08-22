@@ -1,0 +1,102 @@
+// Academic Integrity Ledger (AILedger) Prisma Schema
+// SRS §8 Database Design
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FACULTY
+  REGISTRAR
+  ADMIN
+}
+
+enum AuditAction {
+  GRADE_CREATED
+  GRADE_CORRECTED
+  VERIFICATION_RUN
+  TAMPER_DETECTED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  passwordHash String?       @map("password_hash")
+  role         Role          @default(FACULTY)
+  publicKey    String        @map("public_key")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  gradeRecords GradeRecord[]
+  auditEvents  AuditEvent[]
+
+  @@map("users")
+}
+
+model Student {
+  id         String        @id @default(uuid())
+  studentId  String        @unique @map("student_id")
+  name       String
+  department String
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  gradeRecords GradeRecord[]
+
+  @@map("students")
+}
+
+model Course {
+  id         String        @id @default(uuid())
+  courseCode String        @unique @map("course_code")
+  courseName String        @map("course_name")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  gradeRecords GradeRecord[]
+
+  @@map("courses")
+}
+
+model GradeRecord {
+  id         String   @id @default(uuid())
+  studentId  String   @map("student_id")
+  courseId   String   @map("course_id")
+  grade      String
+  blockIndex Int      @unique @map("block_index")
+  prevHash   String   @map("prev_hash")
+  recordHash String   @unique @map("record_hash")
+  signature  String
+  signedBy   String   @map("signed_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  student    Student  @relation(fields: [studentId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id])
+  signer     User     @relation(fields: [signedBy], references: [id])
+
+  @@index([studentId])
+  @@index([courseId])
+  @@index([signedBy])
+  @@map("grade_records")
+}
+
+model AuditEvent {
+  id             String      @id @default(uuid())
+  actorId        String      @map("actor_id")
+  action         AuditAction
+  targetRecordId String?     @map("target_record_id")
+  metadata       Json?
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  actor          User        @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([targetRecordId])
+  @@map("audit_events")
+}
