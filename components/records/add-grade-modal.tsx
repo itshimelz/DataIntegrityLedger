@@ -5,7 +5,6 @@ import {
   PlusCircle,
   Key,
   ShieldCheck,
-  CheckCircle,
   WarningCircle,
   GraduationCap,
   BookOpen,
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
+import { toast } from "sonner"
 import {
   Select,
   SelectTrigger,
@@ -49,7 +49,6 @@ export function AddGradeModal() {
   const [facultyId, setFacultyId] = useState<string>(activeSignerId)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   // Initialize defaults when opening
   React.useEffect(() => {
@@ -58,7 +57,6 @@ export function AddGradeModal() {
       if (courses.length > 0 && !courseId) setCourseId(courses[0].id)
       if (faculty.length > 0 && !facultyId) setFacultyId(faculty[0].id)
       setErrorMessage(null)
-      setSuccessMessage(null)
     }
   }, [
     isAddModalOpen,
@@ -80,7 +78,6 @@ export function AddGradeModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrorMessage(null)
-    setSuccessMessage(null)
 
     if (!studentId || !courseId || !grade || !facultyId) {
       setErrorMessage("Please complete all required fields.")
@@ -98,56 +95,57 @@ export function AddGradeModal() {
     setIsSubmitting(false)
 
     if (res.success && res.record) {
-      setSuccessMessage(
-        `Block #${res.record.block_index} successfully signed and appended to the ledger!`
+      const selectedStudent = students.find((s) => s.id === studentId)
+      const selectedCourse = courses.find((c) => c.id === courseId)
+      
+      toast.success(
+        `Block #${res.record.block_index} signed and appended to ledger`,
+        {
+          description: `${selectedStudent?.name || studentId} awarded grade ${grade} for ${selectedCourse?.course_code || courseId}.`,
+        }
       )
-      setTimeout(() => {
-        setIsAddModalOpen(false)
-        setSuccessMessage(null)
-      }, 1200)
+      setIsAddModalOpen(false)
     } else {
       setErrorMessage(res.error || "Failed to create signed grade record")
+      toast.error("Failed to append grade block", {
+        description: res.error || "Please check inputs and try again.",
+      })
     }
   }
 
   return (
     <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-      <DialogContent className="flex max-h-[88vh] w-full max-w-[calc(100%-2rem)] sm:max-w-xl md:max-w-2xl flex-col overflow-hidden rounded-none border border-border bg-card p-6">
-        <DialogHeader className="border-b border-border/60 pb-3 pr-10">
+      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-none border border-border bg-card p-6 sm:max-w-xl md:max-w-2xl">
+        <DialogHeader className="border-b border-border/60 pr-10 pb-3">
           <div className="flex items-center gap-3">
             <div className="flex size-9 shrink-0 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
               <PlusCircle className="size-5" weight="bold" />
             </div>
             <div>
-              <DialogTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground">
+              <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
                 Issue Signed Grade Record
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
-                Creates a new tamper-evident ledger block with SHA-256 hash chaining and faculty RSA-2048 signature.
+                Creates a new tamper-evident ledger block with SHA-256 hash
+                chaining and faculty RSA-2048 signature.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between overflow-y-auto pr-1">
-          <div className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4 pt-1">
           {errorMessage && (
-            <div className="flex items-center gap-2 border border-destructive/40 bg-destructive/10 p-3 font-mono text-xs text-destructive">
-              <WarningCircle className="size-4 shrink-0" weight="fill" />
-              <span>{errorMessage}</span>
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="flex items-center gap-2 border border-primary/40 bg-primary/10 p-3 font-mono text-xs text-primary">
-              <CheckCircle className="size-4 shrink-0" weight="fill" />
-              <span>{successMessage}</span>
+            <div className="border border-l-2 border-destructive/40 border-l-destructive bg-destructive/10 p-3 text-xs leading-relaxed text-destructive">
+              <div className="flex items-center gap-2 font-mono">
+                <WarningCircle className="size-4 shrink-0" weight="fill" />
+                <span>{errorMessage}</span>
+              </div>
             </div>
           )}
 
           {/* Student Selector */}
           <div>
-            <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+            <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
               <GraduationCap className="size-3.5 text-primary" weight="bold" />
               Student
             </label>
@@ -161,7 +159,9 @@ export function AddGradeModal() {
                 <SelectValue placeholder="Select Student">
                   {(() => {
                     const s = students.find((item) => item.id === studentId)
-                    return s ? `${s.name} (${s.student_id}) — ${s.department}` : "Select Student"
+                    return s
+                      ? `${s.name} (${s.student_id}) — ${s.department}`
+                      : "Select Student"
                   })()}
                 </SelectValue>
               </SelectTrigger>
@@ -169,8 +169,12 @@ export function AddGradeModal() {
                 {students.map((s) => (
                   <SelectItem key={s.id} value={s.id}>
                     <div className="flex flex-col py-0.5 text-left">
-                      <span className="font-medium text-foreground">{s.name} ({s.student_id})</span>
-                      <span className="text-[10px] text-muted-foreground">{s.department}</span>
+                      <span className="font-medium text-foreground">
+                        {s.name} ({s.student_id})
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">
+                        {s.department}
+                      </span>
                     </div>
                   </SelectItem>
                 ))}
@@ -180,7 +184,7 @@ export function AddGradeModal() {
 
           {/* Course Selector */}
           <div>
-            <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+            <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
               <BookOpen className="size-3.5 text-primary" weight="bold" />
               Course
             </label>
@@ -194,7 +198,9 @@ export function AddGradeModal() {
                 <SelectValue placeholder="Select Course">
                   {(() => {
                     const c = courses.find((item) => item.id === courseId)
-                    return c ? `${c.course_code}: ${c.course_name}` : "Select Course"
+                    return c
+                      ? `${c.course_code}: ${c.course_name}`
+                      : "Select Course"
                   })()}
                 </SelectValue>
               </SelectTrigger>
@@ -202,7 +208,9 @@ export function AddGradeModal() {
                 {courses.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     <div className="flex flex-col py-0.5 text-left">
-                      <span className="font-medium text-foreground">{c.course_code}: {c.course_name}</span>
+                      <span className="font-medium text-foreground">
+                        {c.course_code}: {c.course_name}
+                      </span>
                     </div>
                   </SelectItem>
                 ))}
@@ -213,7 +221,7 @@ export function AddGradeModal() {
           {/* Grade Selector & Faculty Signer */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col">
-              <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+              <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
                 <PlusCircle className="size-3.5 text-primary" weight="bold" />
                 Final Grade Awarded
               </label>
@@ -231,7 +239,9 @@ export function AddGradeModal() {
                 <SelectContent>
                   {GRADE_OPTIONS.map((g) => (
                     <SelectItem key={g} value={g}>
-                      <span className="font-mono font-bold text-foreground">Grade {g}</span>
+                      <span className="font-mono font-bold text-foreground">
+                        Grade {g}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -239,7 +249,7 @@ export function AddGradeModal() {
             </div>
 
             <div className="flex flex-col">
-              <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+              <label className="mb-1.5 flex h-5 items-center gap-1.5 font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
                 <Key className="size-3.5 text-primary" weight="bold" />
                 Authorized Faculty Signer
               </label>
@@ -261,8 +271,12 @@ export function AddGradeModal() {
                   {faculty.map((f) => (
                     <SelectItem key={f.id} value={f.id}>
                       <div className="flex flex-col py-0.5 text-left">
-                        <span className="font-medium text-foreground">{f.name}</span>
-                        <span className="text-[10px] text-muted-foreground">{f.email} • Faculty of CSE</span>
+                        <span className="font-medium text-foreground">
+                          {f.name}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          {f.email} • Faculty of CSE
+                        </span>
                       </div>
                     </SelectItem>
                   ))}
@@ -271,18 +285,18 @@ export function AddGradeModal() {
             </div>
           </div>
 
-          {/* Cryptographic Linkage Preview - Clean subtle box */}
-          <div className="bg-muted/20 p-3.5">
-            <div className="flex items-center justify-between pb-2 font-heading text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+          {/* Cryptographic Linkage Preview - Stylized Left Border Callout */}
+          <div className="border border-l-2 border-border/40 border-l-primary bg-muted/20 p-3.5">
+            <div className="flex items-center justify-between pb-2 font-heading text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
               <span className="flex items-center gap-1.5 text-primary">
                 <ShieldCheck className="size-3.5" weight="bold" />
                 Cryptographic Chaining Preview
               </span>
-              <span className="font-mono text-primary">
+              <span className="font-mono text-xs tracking-wide text-muted-foreground italic">
                 Next Block #{nextBlockIndex}
               </span>
             </div>
-            <div className="mt-2 space-y-1.5 font-mono text-[10px]">
+            <div className="mt-2 space-y-1.5 font-mono text-[11px]">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground uppercase">
                   Previous Block Hash:
@@ -292,13 +306,14 @@ export function AddGradeModal() {
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground uppercase">Signing Algorithm:</span>
+                <span className="text-muted-foreground uppercase">
+                  Signing Algorithm:
+                </span>
                 <span className="font-semibold text-primary">
                   RSA-2048 / SHA-256
                 </span>
               </div>
             </div>
-          </div>
           </div>
 
           <DialogFooter className="mt-4 gap-2 border-t border-border pt-4">

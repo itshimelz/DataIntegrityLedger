@@ -29,16 +29,16 @@ export function StatusBadge({
         <Badge
           variant="outline"
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-none border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-semibold tracking-widest text-primary uppercase",
-            size === "sm" ? "text-[9px] px-1.5 py-0.5" : "text-[10px] px-2 py-1",
+            "inline-flex items-center gap-1.5 rounded-none border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-primary uppercase",
+            size === "sm"
+              ? "px-1.5 py-0.5 text-[11px]"
+              : "px-2 py-1 text-[11px]",
             className
           )}
         >
           <CheckCircle
             className={
-              size === "sm"
-                ? "size-3 text-primary"
-                : "size-3.5 text-primary"
+              size === "sm" ? "size-3 text-primary" : "size-3.5 text-primary"
             }
             weight="fill"
           />
@@ -59,16 +59,18 @@ export function StatusBadge({
         <Badge
           variant="destructive"
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-none border border-destructive/40 bg-destructive/10 px-2 py-0.5 font-mono text-[9px] font-semibold tracking-widest text-destructive uppercase",
-            size === "sm" ? "text-[9px] px-1.5 py-0.5" : "text-[10px] px-2 py-1",
+            "inline-flex items-center gap-1.5 rounded-none border border-destructive/40 bg-destructive/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-destructive uppercase",
+            size === "sm"
+              ? "px-1.5 py-0.5 text-[11px]"
+              : "px-2 py-1 text-[11px]",
             className
           )}
         >
           <WarningCircle
             className={
               size === "sm"
-                ? "size-3 text-destructive animate-pulse"
-                : "size-3.5 text-destructive animate-pulse"
+                ? "size-3 text-destructive"
+                : "size-3.5 text-destructive"
             }
             weight="fill"
           />
@@ -88,8 +90,8 @@ export function StatusBadge({
       <Badge
         variant="secondary"
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-none border border-border bg-muted/60 px-2 py-0.5 font-mono text-[9px] font-semibold tracking-widest text-muted-foreground uppercase",
-          size === "sm" ? "text-[9px] px-1.5 py-0.5" : "text-[10px] px-2 py-1",
+          "inline-flex items-center gap-1.5 rounded-none border border-border bg-muted/60 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-muted-foreground uppercase",
+          size === "sm" ? "px-1.5 py-0.5 text-[11px]" : "px-2 py-1 text-[11px]",
           className
         )}
       >

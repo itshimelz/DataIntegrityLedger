@@ -14,6 +14,7 @@ import { useLedger } from "@/hooks/use-ledger"
 import { Card, CardContent } from "@/components/ui/card"
 import { TamperAlert } from "./tamper-alert"
 import { VerificationChecklist } from "./verification-checklist"
+import { toast } from "sonner"
 
 export function VerificationPanel() {
   const { records, verificationReport, runVerification, isVerifying } =
@@ -22,17 +23,34 @@ export function VerificationPanel() {
   const [auditMessage, setAuditMessage] = useState<string | null>(null)
 
   const isTampered = verificationReport?.status === "FLAGGED"
+  // ponytail: honesty first — before an audit runs, show "not yet audited", never implied health
+  const audited = verificationReport !== null
   const total = records.length
-  const valid = verificationReport?.valid ?? total
-  const invalid = verificationReport?.invalid ?? 0
+  const valid = verificationReport?.valid ?? null
+  const invalid = verificationReport?.invalid ?? null
+  const chainLinked = records.filter(
+    (r) => r.verification?.chain_valid !== false
+  ).length
+  const signaturesValid = records.filter(
+    (r) => r.verification?.signature_valid !== false
+  ).length
   const verifiedAt = verificationReport?.verified_at
     ? new Date(verificationReport.verified_at).toLocaleTimeString()
-    : "LIVE"
+    : null
 
   const handleVerify = async () => {
     const report = await runVerification()
     if (report) {
       setAuditMessage(`AUDIT COMPLETED AT ${new Date().toLocaleTimeString()}`)
+      if (report.status === "VERIFIED") {
+        toast.success("Ledger Verification Passed", {
+          description: `All ${report.total} blocks cryptographically verified and intact.`,
+        })
+      } else {
+        toast.error("Integrity Alert: Tampering Detected", {
+          description: `${report.invalid} of ${report.total} blocks failed cryptographic assertions.`,
+        })
+      }
       setTimeout(() => setAuditMessage(null), 3000)
     }
   }
@@ -47,7 +65,7 @@ export function VerificationPanel() {
               <div
                 className={`flex size-12 shrink-0 items-center justify-center border ${
                   isTampered
-                    ? "border-destructive/40 bg-destructive text-destructive-foreground"
+                    ? "text-destructive-foreground border-destructive/40 bg-destructive"
                     : "border-primary/40 bg-primary text-primary-foreground"
                 }`}
               >
@@ -59,33 +77,54 @@ export function VerificationPanel() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-heading text-base font-semibold tracking-wider uppercase text-foreground">
-                    {isTampered
-                      ? "Ledger Chain Flagged: Tampering Detected"
-                      : "Ledger Chain Verified & Healthy"}
+                  <h2 className="font-heading text-base font-semibold tracking-wider text-foreground uppercase">
+                    {isTampered ? (
+                      <>
+                        Ledger Chain Flagged:{" "}
+                        <em className="italic">Tampering Detected</em>
+                      </>
+                    ) : audited ? (
+                      <>
+                        Ledger Chain <em className="italic">Verified</em> &amp;
+                        Healthy
+                      </>
+                    ) : (
+                      "Ledger Awaiting First Audit"
+                    )}
                   </h2>
                 </div>
                 <p className="mt-1 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-                  The automated verification engine independently verifies every block by reconstructing the canonical byte serialization, re-calculating SHA-256 digests, traversing sequential previous hashes, and validating faculty RSA-2048 digital signatures.
+                  The automated verification engine independently verifies every
+                  block by reconstructing the canonical byte serialization,
+                  re-calculating SHA-256 digests, traversing sequential previous
+                  hashes, and validating faculty RSA-2048 digital signatures.
                 </p>
-                <div className="mt-3 flex items-center gap-4 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+                <div className="mt-3 flex items-center gap-4 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
                   <span>
-                    Last Audit: <strong className="text-foreground">{verifiedAt}</strong>
+                    Last Audit:{" "}
+                    <strong className="text-foreground">
+                      {verifiedAt ?? "Not yet run"}
+                    </strong>
                   </span>
                   <span>•</span>
                   <span>
-                    Scanned: <strong className="text-foreground">{total} Blocks</strong>
+                    Scanned:{" "}
+                    <strong className="text-foreground">{total} Blocks</strong>
                   </span>
-                  <span>•</span>
-                  <span
-                    className={
-                      isTampered
-                        ? "font-bold text-destructive"
-                        : "font-bold text-primary"
-                    }
-                  >
-                    {valid} Valid / {invalid} Flagged
-                  </span>
+                  {audited && (
+                    <>
+                      <span>•</span>
+                      <span
+                        className={
+                          isTampered
+                            ? "font-bold text-destructive"
+                            : "font-bold text-primary"
+                        }
+                      >
+                        {valid} Valid / {invalid} Flagged
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -99,8 +138,12 @@ export function VerificationPanel() {
                 whileHover={!isVerifying ? { y: -1 } : undefined}
                 whileTap={!isVerifying ? { y: 0 } : undefined}
                 transition={{ duration: 0.12 }}
-                className="inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-none bg-primary px-5 py-3 font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-80"
+                className="group relative inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-none bg-primary px-5 py-3 font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase transition-all hover:bg-primary/90 disabled:opacity-80"
               >
+                <span
+                  aria-hidden
+                  className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
+                />
                 <AnimatePresence mode="wait">
                   {isVerifying ? (
                     <motion.div
@@ -112,7 +155,11 @@ export function VerificationPanel() {
                     >
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1,
+                          ease: "linear",
+                        }}
                       >
                         <ArrowClockwise className="size-4" weight="bold" />
                       </motion.div>
@@ -130,9 +177,7 @@ export function VerificationPanel() {
                   )}
                 </AnimatePresence>
                 <span>
-                  {isVerifying
-                    ? "Scanning Chain..."
-                    : "Run Verification Audit"}
+                  {isVerifying ? "Scanning Chain..." : "Run Verification Audit"}
                 </span>
               </motion.button>
 
@@ -142,7 +187,7 @@ export function VerificationPanel() {
                     initial={{ opacity: 0, y: -2 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -2 }}
-                    className="font-mono text-[10px] font-semibold text-primary uppercase"
+                    className="font-mono text-[11px] font-semibold text-primary uppercase"
                   >
                     {auditMessage}
                   </motion.span>
@@ -160,14 +205,18 @@ export function VerificationPanel() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="rounded-none border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider uppercase text-muted-foreground">
+            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               <FileText className="size-4 text-primary" />
               <span>1. Payload Content Integrity</span>
             </div>
             <div className="mt-2 font-serif text-2xl font-bold text-foreground">
-              {valid} / {total} Match
+              {audited ? (
+                `${valid} / ${total} Match`
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              )}
             </div>
-            <p className="mt-1 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+            <p className="mt-1 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
               Recomputed SHA-256 digests against canonical JSON.
             </p>
           </CardContent>
@@ -175,14 +224,22 @@ export function VerificationPanel() {
 
         <Card className="rounded-none border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider uppercase text-muted-foreground">
+            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               <Fingerprint className="size-4 text-primary" />
               <span>2. Hash Chain Continuity</span>
             </div>
             <div className="mt-2 font-serif text-2xl font-bold text-foreground">
-              {isTampered ? "Discrepancy" : "100% Intact"}
+              {audited ? (
+                isTampered ? (
+                  <span className="text-destructive">{chainLinked} / {total} Linked</span>
+                ) : (
+                  `${chainLinked} / ${total} Linked`
+                )
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              )}
             </div>
-            <p className="mt-1 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+            <p className="mt-1 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
               Validated sequential prev_hash linkage.
             </p>
           </CardContent>
@@ -190,15 +247,19 @@ export function VerificationPanel() {
 
         <Card className="rounded-none border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider uppercase text-muted-foreground">
+            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               <LockKey className="size-4 text-primary" />
               <span>3. Cryptographic Authenticity</span>
             </div>
             <div className="mt-2 font-serif text-2xl font-bold text-foreground">
-              RSA-2048 PKCS#1
+              {audited ? (
+                `${signaturesValid} / ${total} Signed`
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              )}
             </div>
-            <p className="mt-1 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
-              Faculty signatures verified with SPKI public keys.
+            <p className="mt-1 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
+              Faculty signatures verified with RSA-2048 public keys.
             </p>
           </CardContent>
         </Card>

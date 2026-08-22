@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 }
 
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function RootLayout({
   children,
@@ -45,9 +46,10 @@ export default function RootLayout({
         fontMono.variable
       )}
     >
-      <body className="min-h-screen bg-[#faf9f5] font-sans text-stone-900 antialiased dark:bg-[#0c0f12] dark:text-stone-100">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <ThemeProvider>
           <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

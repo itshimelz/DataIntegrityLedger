@@ -33,23 +33,29 @@ export function TamperAlert() {
     : null
 
   return (
-    <Alert variant="destructive" className="rounded-none border-destructive bg-destructive/10 p-5">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start w-full">
+    <Alert
+      variant="destructive"
+      className="rounded-none border-destructive bg-destructive/10 p-5"
+    >
+      <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="flex items-start gap-3.5">
-          <div className="flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive text-destructive-foreground">
+          <div className="text-destructive-foreground flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive">
             <WarningOctagon className="size-5" weight="bold" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <AlertTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-destructive">
+              <AlertTitle className="font-heading text-sm font-semibold tracking-wider text-destructive uppercase">
                 Integrity Compromised: Unauthorized Database Mutation
               </AlertTitle>
-              <span className="border border-destructive/40 bg-destructive/20 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-widest text-destructive uppercase">
-                {flaggedIssues.length} Violation{flaggedIssues.length > 1 ? "s" : ""}
+              <span className="border border-destructive/40 bg-destructive/20 px-1.5 py-0.5 font-mono text-[11px] font-bold tracking-widest text-destructive uppercase">
+                {flaggedIssues.length} Violation
+                {flaggedIssues.length > 1 ? "s" : ""}
               </span>
             </div>
             <AlertDescription className="mt-1 max-w-3xl text-xs leading-relaxed text-destructive/90">
-              The automated verification scanner detected an unauthorized mutation in stored records. The stored SHA-256 digest and RSA-2048 signature do not match the modified content.
+              The automated verification scanner detected an unauthorized
+              mutation in stored records. The stored SHA-256 digest and RSA-2048
+              signature do not match the modified content.
             </AlertDescription>
 
             {/* Tampered Record Quick Diagnosis */}
@@ -86,7 +92,7 @@ export function TamperAlert() {
                   </div>
                 </div>
 
-                <div className="mt-2 font-mono text-[10px] text-destructive">
+                <div className="mt-2 font-mono text-[11px] text-destructive">
                   Failed checks:{" "}
                   {firstFlagged.error ||
                     "Content hash mismatch (stored hash does not match current payload)"}
@@ -104,7 +110,7 @@ export function TamperAlert() {
               variant="destructive"
               size="sm"
               onClick={() => setSelectedRecordForCrypto(targetRecord)}
-              className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-none bg-destructive px-3 py-2 font-heading text-xs font-semibold tracking-widest text-destructive-foreground uppercase transition-colors hover:bg-destructive/90 active:translate-y-px"
+              className="text-destructive-foreground inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-none bg-destructive px-3 py-2 font-heading text-xs font-semibold tracking-widest uppercase transition-colors hover:bg-destructive/90 active:translate-y-px"
             >
               <Eye className="size-3.5" />
               <span>Inspect Proof</span>

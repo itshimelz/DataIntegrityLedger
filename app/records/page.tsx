@@ -9,11 +9,12 @@ export default function RecordsPage() {
       <div className="space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="font-heading text-xl font-bold tracking-wider uppercase text-foreground md:text-2xl">
+          <h1 className="font-heading text-xl font-bold tracking-wider text-foreground uppercase md:text-2xl">
             Academic Grade Ledger Records
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
-            Browse, filter, and inspect cryptographic proofs for all authenticated blocks in the ledger.
+            Browse, filter, and inspect cryptographic proofs for all
+            authenticated blocks in the ledger.
           </p>
         </div>
 

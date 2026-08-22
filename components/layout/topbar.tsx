@@ -23,14 +23,21 @@ import {
   PopoverTitle,
   PopoverDescription,
 } from "@/components/ui/popover"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function Topbar() {
   const pathname = usePathname()
   const { resolvedTheme, setTheme } = useTheme()
-  const { verificationReport, setIsAddModalOpen, records, faculty, activeSignerId } = useLedger()
+  const {
+    verificationReport,
+    setIsAddModalOpen,
+    records,
+    faculty,
+    activeSignerId,
+  } = useLedger()
 
-  const activeFaculty = faculty.find((f) => f.id === activeSignerId) || faculty[0]
-  const isChainTampered = verificationReport?.status === "FLAGGED"
+  const activeFaculty =
+    faculty.find((f) => f.id === activeSignerId) || faculty[0]
 
   // Breadcrumb mapping
   const getPageTitle = () => {
@@ -41,9 +48,10 @@ export function Topbar() {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-border bg-card/90 px-6 backdrop-blur-md">
-      {/* Left: Breadcrumbs and Page Identity */}
-      <div className="flex items-center gap-2 text-xs">
+    <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur-md md:px-6">
+      {/* Left: Sidebar Toggle, Breadcrumbs and Page Identity */}
+      <div className="flex items-center gap-2.5 text-xs">
+        <SidebarTrigger className="-ml-1 text-foreground hover:bg-muted" />
         <span className="font-heading text-xs font-semibold tracking-widest text-muted-foreground uppercase">
           AILedger
         </span>
@@ -53,44 +61,38 @@ export function Topbar() {
         </span>
       </div>
 
-      {/* Right: Status Beacon, Signer Pill, Action Button, Theme Switcher */}
-      <div className="flex items-center gap-3">
-        {/* Real-time Ledger Health Beacon with Framer Motion Pulse */}
-        <div className="hidden items-center gap-2 rounded-none border border-border bg-card px-3 py-1 text-xs md:flex">
-          {isChainTampered ? (
+      {/* Right: Status Beacon, Signer Pill, Action Button, Theme Switcher - All Unified h-8 */}
+      <div className="flex items-center gap-2.5">
+        {/* Real-time Ledger Health Beacon — never claims health before an audit exists */}
+        <div className="hidden h-8 items-center gap-2 rounded-none border border-border bg-card/80 px-3 text-xs md:inline-flex">
+          {verificationReport?.status === "FLAGGED" ? (
             <>
-              <span className="relative flex size-2">
-                <motion.span
-                  animate={{ scale: [1, 1.8, 1], opacity: [0.7, 0, 0.7] }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                  className="absolute inline-flex h-full w-full rounded-full bg-destructive"
-                />
-                <span className="relative inline-flex size-2 rounded-full bg-destructive" />
-              </span>
+              <span className="size-2 shrink-0 rounded-full bg-destructive" />
               <WarningOctagon
-                className="size-3.5 text-destructive"
+                className="size-3.5 shrink-0 text-destructive"
                 weight="bold"
               />
-              <span className="font-mono text-[10px] font-semibold tracking-wider text-destructive uppercase">
-                TAMPER DETECTED ({verificationReport?.invalid} Issues)
+              <span className="font-mono text-[11px] font-semibold tracking-wider text-destructive">
+                Tamper detected · {verificationReport.invalid} issue
+                {verificationReport.invalid === 1 ? "" : "s"}
+              </span>
+            </>
+          ) : verificationReport ? (
+            <>
+              <span className="size-2 shrink-0 rounded-full bg-primary" />
+              <ShieldCheck
+                className="size-3.5 shrink-0 text-primary"
+                weight="bold"
+              />
+              <span className="font-mono text-[11px] font-medium tracking-wider text-primary">
+                Ledger verified · {records.length} blocks
               </span>
             </>
           ) : (
             <>
-              <span className="relative flex size-2">
-                <motion.span
-                  animate={{ scale: [1, 1.6, 1], opacity: [0.6, 0, 0.6] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="absolute inline-flex h-full w-full rounded-full bg-primary"
-                />
-                <span className="relative inline-flex size-2 rounded-full bg-primary" />
-              </span>
-              <ShieldCheck
-                className="size-3.5 text-primary"
-                weight="bold"
-              />
-              <span className="font-mono text-[10px] font-medium tracking-wider text-primary uppercase">
-                Ledger Chain: Healthy ({records.length} Blocks)
+              <span className="size-2 shrink-0 rounded-full bg-muted-foreground/50" />
+              <span className="font-mono text-[11px] font-medium tracking-wider text-muted-foreground">
+                Not yet audited
               </span>
             </>
           )}
@@ -105,19 +107,26 @@ export function Topbar() {
                 whileHover={{ y: -1 }}
                 whileTap={{ y: 0 }}
                 transition={{ duration: 0.12 }}
-                className="hidden cursor-pointer items-center gap-1.5 rounded-none border border-primary/30 bg-primary/10 px-2.5 py-1 font-heading text-[10px] font-semibold tracking-widest text-primary uppercase transition-colors hover:bg-primary/20 lg:flex"
+                className="group relative hidden h-8 cursor-pointer items-center gap-1.5 rounded-none border border-primary/30 bg-primary/10 px-3 font-heading text-[11px] font-semibold tracking-wider text-primary uppercase transition-all hover:border-primary/60 hover:bg-primary/20 lg:inline-flex"
               />
             }
           >
-            <Key
-              className="size-3.5 text-primary"
-              weight="bold"
+            <span
+              aria-hidden
+              className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
             />
-            <span>Signer: {activeFaculty?.name || "Prof. S. H. Mamun"}</span>
+            <Key className="size-3.5 shrink-0 text-primary" weight="bold" />
+            <span className="truncate">
+              Signer: {activeFaculty?.name || "Prof. S. H. Mamun"}
+            </span>
           </PopoverTrigger>
-          <PopoverContent side="bottom" align="end" className="w-80 rounded-none border border-border bg-card p-4">
+          <PopoverContent
+            side="bottom"
+            align="end"
+            className="w-80 rounded-none border border-border bg-card p-4"
+          >
             <PopoverHeader>
-              <PopoverTitle className="font-heading text-xs uppercase tracking-wider text-foreground">
+              <PopoverTitle className="font-heading text-xs tracking-wider text-foreground uppercase">
                 Active Signing Authority
               </PopoverTitle>
               <PopoverDescription className="text-xs text-muted-foreground">
@@ -126,51 +135,65 @@ export function Topbar() {
             </PopoverHeader>
             <div className="mt-3 space-y-2 text-xs">
               <div>
-                <span className="block font-heading text-[9px] uppercase tracking-wider text-muted-foreground">
+                <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
                   Faculty Member
                 </span>
-                <span className="font-medium text-foreground">{activeFaculty?.name}</span>
+                <span className="font-medium text-foreground">
+                  {activeFaculty?.name}
+                </span>
               </div>
               <div>
-                <span className="block font-heading text-[9px] uppercase tracking-wider text-muted-foreground">
+                <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
                   Email & Authority
                 </span>
-                <span className="font-mono text-xs text-foreground">{activeFaculty?.email} (FACULTY)</span>
+                <span className="font-mono text-xs text-foreground">
+                  {activeFaculty?.email} (FACULTY)
+                </span>
               </div>
               <div>
-                <span className="block font-heading text-[9px] uppercase tracking-wider text-muted-foreground">
+                <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
                   Department
                 </span>
-                <span className="text-foreground">Computer Science & Engineering</span>
+                <span className="text-foreground">
+                  Computer Science & Engineering
+                </span>
               </div>
             </div>
           </PopoverContent>
         </Popover>
 
-        {/* Add Record Modal Trigger Button with Motion */}
+        {/* Add Record Modal Trigger Button with Motion & Hermes Arc Border */}
         <motion.button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
           whileHover={{ y: -1 }}
           whileTap={{ y: 0 }}
           transition={{ duration: 0.12 }}
-          className="inline-flex cursor-pointer items-center gap-1.5 rounded-none border border-transparent bg-primary px-3.5 py-1.5 font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+          className="group relative inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-none border border-primary bg-primary px-3.5 font-heading text-[11px] font-semibold tracking-wider text-primary-foreground uppercase transition-all hover:bg-primary/90"
         >
-          <Plus className="size-3.5" weight="bold" />
+          <span
+            aria-hidden
+            className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
+          />
+          <Plus className="size-3.5 shrink-0" weight="bold" />
           <span>New Record</span>
         </motion.button>
 
-        {/* Theme Switcher Toggle with Motion */}
+        {/* Theme Switcher Toggle with Motion & Hermes Arc Border */}
         <motion.button
           type="button"
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           whileHover={{ y: -1 }}
           whileTap={{ y: 0 }}
           transition={{ duration: 0.12 }}
-          className="cursor-pointer rounded-none border border-border bg-card p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-none border border-border bg-card text-muted-foreground transition-all hover:border-border hover:bg-muted hover:text-foreground"
           aria-label="Toggle theme"
           title="Toggle light/dark theme"
         >
+          <span
+            aria-hidden
+            className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
+          />
           <AnimatePresence mode="wait">
             {resolvedTheme === "dark" ? (
               <motion.div
@@ -179,8 +202,9 @@ export function Topbar() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 45, opacity: 0 }}
                 transition={{ duration: 0.15 }}
+                className="flex items-center justify-center"
               >
-                <Sun className="size-4" weight="bold" />
+                <Sun className="size-3.5" weight="bold" />
               </motion.div>
             ) : (
               <motion.div
@@ -189,8 +213,9 @@ export function Topbar() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: -45, opacity: 0 }}
                 transition={{ duration: 0.15 }}
+                className="flex items-center justify-center"
               >
-                <Moon className="size-4" weight="bold" />
+                <Moon className="size-3.5" weight="bold" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -199,4 +224,3 @@ export function Topbar() {
     </header>
   )
 }
-

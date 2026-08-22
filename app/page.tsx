@@ -13,11 +13,12 @@ export default function DashboardPage() {
         {/* Page Header */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="font-heading text-xl font-bold tracking-wider uppercase text-foreground md:text-2xl">
+            <h1 className="font-heading text-xl font-bold tracking-wider text-foreground uppercase md:text-2xl">
               Registrar Grade Ledger Overview
             </h1>
             <p className="mt-1 text-xs text-muted-foreground">
-              Tamper-evident academic records authenticated with SHA-256 hash chaining and RSA-2048 faculty signatures.
+              Tamper-evident academic records authenticated with SHA-256 hash
+              chaining and RSA-2048 faculty signatures.
             </p>
           </div>
         </div>

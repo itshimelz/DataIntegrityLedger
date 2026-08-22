@@ -12,6 +12,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
 import {
   Select,
@@ -31,12 +32,19 @@ export function TamperModal() {
   const [tamperedGrade, setTamperedGrade] = useState<string>("A+")
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  // ponytail: two-step arm/confirm so one click can't silently rewrite a grade
+  const [isArmed, setIsArmed] = useState<boolean>(false)
 
   React.useEffect(() => {
     if (isTamperModalOpen && records.length > 0 && !selectedRecordId) {
       setSelectedRecordId(records[0].id)
     }
+    if (!isTamperModalOpen) setIsArmed(false)
   }, [isTamperModalOpen, records, selectedRecordId])
+
+  React.useEffect(() => {
+    setIsArmed(false)
+  }, [selectedRecordId, tamperedGrade])
 
   const targetRecord =
     records.find((r) => r.id === selectedRecordId) || records[0]
@@ -52,59 +60,70 @@ export function TamperModal() {
     setIsSubmitting(false)
 
     if (res.success) {
+      toast.error(`Tamper simulation committed on Block #${targetRecord.block_index}`, {
+        description: `Direct database record updated to grade ${tamperedGrade}. Run verification to detect cryptographic discrepancy.`,
+      })
       setIsTamperModalOpen(false)
     } else {
       setError(res.error || "Failed to simulate tampering")
+      toast.error("Tampering simulation failed", {
+        description: res.error || "Please try again.",
+      })
     }
   }
 
   return (
     <Dialog open={isTamperModalOpen} onOpenChange={setIsTamperModalOpen}>
-      <DialogContent className="flex max-h-[88vh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-xl flex-col overflow-hidden rounded-none border border-destructive/40 bg-card p-6">
-        <DialogHeader className="border-b border-border/60 pb-3 pr-10">
+      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-none border border-destructive/40 bg-card p-6 sm:max-w-lg md:max-w-xl">
+        <DialogHeader className="border-b border-border/60 pr-10 pb-3">
           <div className="flex items-center gap-3">
             <div className="flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive/10 text-destructive">
               <Bug className="size-5" weight="bold" />
             </div>
             <div>
-              <DialogTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-destructive">
+              <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-destructive uppercase">
                 Simulate DB Tampering (SRS FR-14)
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
-                Simulate an unauthorized rogue SQL update on the database that bypasses application signing logic.
+                Simulate an unauthorized rogue SQL update on the database that
+                bypasses application signing logic.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleTamper} className="flex flex-1 flex-col justify-between overflow-y-auto pr-1">
-          <div className="space-y-4 text-xs">
+        <form onSubmit={handleTamper} className="flex flex-col space-y-4 pt-1">
           {error && (
-            <div className="border border-destructive/40 bg-destructive/10 p-2.5 font-mono text-xs text-destructive">
+            <div className="border border-l-2 border-destructive/40 border-l-destructive bg-destructive/10 p-3 font-mono text-xs leading-relaxed text-destructive">
               {error}
             </div>
           )}
 
-          {/* Educational Explainer Banner - Clean background */}
-          <div className="bg-muted/30 p-3 text-muted-foreground">
+          {/* Educational Explainer Banner - Stylized Left Border Callout */}
+          <div className="border border-l-2 border-border/40 border-l-primary bg-muted/20 p-3 text-xs leading-relaxed text-muted-foreground">
             <div className="flex items-start gap-2">
               <ShieldWarning
                 className="mt-0.5 size-4 shrink-0 text-primary"
                 weight="bold"
               />
               <div className="text-[11px] leading-relaxed">
-                <strong className="text-foreground">Security Demonstration:</strong> In a conventional DB, an SQL{" "}
+                <strong className="text-foreground">
+                  Security Demonstration:
+                </strong>{" "}
+                In a conventional DB, an SQL{" "}
                 <code className="bg-muted px-1 font-mono text-foreground">
                   UPDATE
                 </code>{" "}
-                overwrites data invisibly. In AILedger, the stored SHA-256 hash and RSA signature will immediately detect this modification on verification.
+                overwrites data invisibly. In AILedger, the stored SHA-256 hash
+                and RSA signature will immediately detect this modification on
+                verification.
               </div>
             </div>
           </div>
 
           {/* Target Record Selector */}
           <div>
-            <label className="mb-1.5 block font-heading text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
+            <label className="mb-1.5 block font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
               Select Ledger Block to Mutate
             </label>
             <Select
@@ -116,7 +135,9 @@ export function TamperModal() {
               <SelectTrigger className="h-10 w-full rounded-none border border-border bg-card px-3 font-sans text-xs text-foreground focus:border-destructive">
                 <SelectValue placeholder="Select Record">
                   {(() => {
-                    const r = records.find((item) => item.id === selectedRecordId) || records[0]
+                    const r =
+                      records.find((item) => item.id === selectedRecordId) ||
+                      records[0]
                     return r
                       ? `Block #${r.block_index} — ${r.student?.name || r.student_id} (${r.course?.course_code}) • Current Grade: ${r.grade}`
                       : "Select Record"
@@ -128,10 +149,13 @@ export function TamperModal() {
                   <SelectItem key={r.id} value={r.id}>
                     <div className="flex flex-col py-0.5 text-left">
                       <span className="font-medium text-foreground">
-                        Block #{r.block_index} ({r.id}) — {r.student?.name || r.student_id}
+                        Block #{r.block_index} ({r.id}) —{" "}
+                        {r.student?.name || r.student_id}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        {r.course?.course_code}: {r.course?.course_name} • Current Grade: <strong className="text-primary">{r.grade}</strong>
+                      <span className="text-[11px] text-muted-foreground">
+                        {r.course?.course_code}: {r.course?.course_name} •
+                        Current Grade:{" "}
+                        <strong className="text-primary">{r.grade}</strong>
                       </span>
                     </div>
                   </SelectItem>
@@ -143,12 +167,12 @@ export function TamperModal() {
           {/* Tampered Grade Input - Always horizontal layout */}
           {targetRecord && (
             <div className="pt-1">
-              <div className="mb-2 font-heading text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+              <div className="mb-2 font-heading text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                 Simulated Grade Mutation:
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex flex-1 flex-col bg-muted/40 p-3 text-center">
-                  <div className="flex h-5 items-center justify-center font-heading text-[9px] font-semibold tracking-widest text-muted-foreground uppercase">
+                  <div className="flex h-5 items-center justify-center font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
                     Original Grade
                   </div>
                   <div className="mt-1 flex h-10 items-center justify-center font-mono text-xl font-bold text-foreground">
@@ -164,7 +188,7 @@ export function TamperModal() {
                 </div>
 
                 <div className="flex flex-1 flex-col bg-destructive/10 p-3 text-center">
-                  <div className="flex h-5 items-center justify-center font-heading text-[9px] font-semibold tracking-widest text-destructive uppercase">
+                  <div className="flex h-5 items-center justify-center font-heading text-[11px] font-semibold tracking-widest text-destructive uppercase">
                     Tampered Grade
                   </div>
                   <div className="mt-1 flex h-10 items-center justify-center">
@@ -192,7 +216,6 @@ export function TamperModal() {
               </div>
             </div>
           )}
-          </div>
 
           <DialogFooter className="mt-4 gap-2 border-t border-border pt-4">
             <Button
@@ -208,11 +231,23 @@ export function TamperModal() {
               type="submit"
               size="sm"
               disabled={isSubmitting}
-              className="rounded-none bg-destructive font-heading text-xs font-semibold tracking-widest text-destructive-foreground uppercase hover:bg-destructive/90"
+              onClick={(e) => {
+                if (!isArmed) {
+                  e.preventDefault()
+                  setIsArmed(true)
+                }
+              }}
+              className={`rounded-none font-heading text-xs font-semibold tracking-widest uppercase ${
+                isArmed
+                  ? "text-destructive-foreground animate-none bg-destructive hover:bg-destructive"
+                  : "text-destructive-foreground bg-destructive hover:bg-destructive/90"
+              }`}
             >
               {isSubmitting
                 ? "Executing Tamper..."
-                : "Execute Mutation"}
+                : isArmed
+                  ? `Confirm: Overwrite ${targetRecord?.grade} with ${tamperedGrade}`
+                  : "Arm Mutation"}
             </Button>
           </DialogFooter>
         </form>

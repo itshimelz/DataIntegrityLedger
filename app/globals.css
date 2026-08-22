@@ -5,14 +5,16 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  /* ponytail: paper background as token so the theme system paints the whole brand */
+  --background: oklch(0.978 0.004 95);
   --foreground: oklch(0.147 0.004 49.25);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.508 0.118 165.612);
-  --primary-foreground: oklch(0.979 0.021 166.113);
+  /* ponytail: primary darkened one step from 0.508 to clear WCAG AA 4.5:1 for small text on paper */
+  --primary: oklch(0.43 0.11 165.612);
+  --primary-foreground: oklch(0.985 0.01 166.113);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.97 0.001 106.424);
@@ -29,14 +31,14 @@
   --chart-4: oklch(0.52 0.105 223.128);
   --chart-5: oklch(0.45 0.085 224.283);
   --radius: 0;
-  --sidebar: oklch(0.985 0.001 106.423);
-  --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.596 0.145 163.225);
-  --sidebar-primary-foreground: oklch(0.979 0.021 166.113);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
-  --sidebar-ring: oklch(0.709 0.01 56.259);
+  --sidebar: #061a12;
+  --sidebar-foreground: #e7e5e4;
+  --sidebar-primary: #10b981;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0e3b23;
+  --sidebar-accent-foreground: #6ee7b7;
+  --sidebar-border: #143826;
+  --sidebar-ring: #10b981;
 }
 
 .dark {
@@ -58,19 +60,14 @@
   --border: oklch(1 0 0 / 9%);
   --input: oklch(1 0 0 / 12%);
   --ring: oklch(0.508 0.118 165.612);
-  --chart-1: oklch(0.865 0.127 207.078);
-  --chart-2: oklch(0.715 0.143 215.221);
-  --chart-3: oklch(0.609 0.126 221.723);
-  --chart-4: oklch(0.52 0.105 223.128);
-  --chart-5: oklch(0.45 0.085 224.283);
-  --sidebar: oklch(0.13 0.012 165);
-  --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.508 0.118 165.612);
-  --sidebar-primary-foreground: oklch(0.979 0.021 166.113);
-  --sidebar-accent: oklch(0.18 0.015 165);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.508 0.118 165.612);
+  --sidebar: #061a12;
+  --sidebar-foreground: #e7e5e4;
+  --sidebar-primary: #10b981;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0e3b23;
+  --sidebar-accent-foreground: #6ee7b7;
+  --sidebar-border: #143826;
+  --sidebar-ring: #10b981;
 }
 
 @theme inline {
@@ -86,11 +83,6 @@
     --color-sidebar-primary: var(--sidebar-primary);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
@@ -133,6 +125,22 @@
   html {
     @apply font-sans;
   }
+  /* Visible focus for every interactive element (keyboard users) */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+  /* Vestibular safety: collapse ambient and looping motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 
   /* Sleek custom scrollbars matching base-sera aesthetics */
   ::-webkit-scrollbar {
@@ -157,4 +165,103 @@
     width: 0;
     height: 0;
   }
+}
+
+/* Hermes-style animated gradient stroke border ring */
+@keyframes gradient-stroke {
+  0% {
+    background-position: 15% 15%;
+  }
+  100% {
+    background-position: 75% 75%;
+  }
+}
+
+.arc-border {
+  --arc-c0: color-mix(in srgb, var(--foreground) 25%, transparent);
+  --arc-c1: var(--primary);
+  --arc-c2: var(--background);
+  --arc-angle: 160deg;
+  --arc-width: 1.5px;
+  --arc-inset: -1.5px;
+  --arc-duration: 4s;
+  --arc-gradient: linear-gradient(
+    var(--arc-angle),
+    transparent 0%,
+    var(--arc-c0) 15%,
+    var(--arc-c1) 20%,
+    var(--arc-c2) 25%,
+    transparent 35%,
+    transparent 40%,
+    var(--arc-c0) 55%,
+    var(--arc-c1) 60%,
+    var(--arc-c2) 65%,
+    transparent 75%,
+    transparent 80%,
+    var(--arc-c0) 95%,
+    var(--arc-c1) 100%
+  );
+
+  position: absolute;
+  inset: var(--arc-inset);
+  padding: var(--arc-width);
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 10;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.arc-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--arc-gradient);
+  background-size: 300% 300%;
+  animation: gradient-stroke var(--arc-duration) linear infinite;
+}
+
+.arc-border-destructive {
+  --arc-c1: var(--destructive);
+}
+
+.arc-border-emerald {
+  --arc-c1: #10b981;
+}
+
+/* Hermes Card Noise & Subtle Grain Texture */
+[data-slot="card"],
+.card-noise {
+  position: relative;
+}
+
+[data-slot="card"]::after,
+.card-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.dark [data-slot="card"]::after,
+.dark .card-noise::after {
+  opacity: 0.055;
+  mix-blend-mode: color-dodge;
+}
+
+[data-slot="card"] > * {
+  position: relative;
+  z-index: 1;
 }

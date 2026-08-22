@@ -51,6 +51,8 @@ interface LedgerContextType {
   verificationReport: LedgerVerificationReport | null
   loading: boolean
   isVerifying: boolean
+  error: string | null
+  announcement: string | null
   tamperSimulation: TamperSimulationState | null
   selectedRecordForCrypto: EnrichedGradeRecord | null
   isAddModalOpen: boolean
@@ -89,6 +91,9 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
     useState<LedgerVerificationReport | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [isVerifying, setIsVerifying] = useState<boolean>(false)
+  // ponytail: one global fetch-error slot; a trust product must never look calm while broken
+  const [error, setError] = useState<string | null>(null)
+  const [announcement, setAnnouncement] = useState<string | null>(null)
   const [tamperSimulation, setTamperSimulation] =
     useState<TamperSimulationState | null>(null)
   const [selectedRecordForCrypto, setSelectedRecordForCrypto] =
@@ -138,9 +143,17 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
         setCourses(data.courses || [])
         setFaculty(data.faculty || [])
         setAuditEvents(data.auditEvents || [])
+        setError(null)
+      } else {
+        setError(data.error || "Failed to load ledger data.")
       }
     } catch (err) {
       console.error("Failed to fetch ledger data:", err)
+      setError(
+        err instanceof Error
+          ? `Cannot reach the ledger service: ${err.message}`
+          : "Cannot reach the ledger service."
+      )
     } finally {
       setLoading(false)
     }
@@ -178,6 +191,11 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
             },
           }))
         )
+        setAnnouncement(
+          data.report.status === "FLAGGED"
+            ? "Integrity alert: Cryptographic ledger discrepancies detected"
+            : "Integrity verification complete: All ledger blocks authenticated"
+        )
         return data.report
       }
       return null
@@ -204,6 +222,9 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
         })
         const data = await res.json()
         if (data.success) {
+          setAnnouncement(
+            `Block #${data.record?.block_index ?? ""} signed and appended`
+          )
           await refreshData()
           return { success: true, record: data.record }
         }
@@ -241,6 +262,9 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
             tamperedAt: new Date().toLocaleTimeString(),
           })
 
+          setAnnouncement(
+            `Tamper simulation executed on Block #${rec.block_index}`
+          )
           await refreshData()
           return { success: true }
         }
@@ -261,10 +285,16 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json()
       if (data.success) {
         setTamperSimulation(null)
+        setAnnouncement("Demo ledger state restored to verified baseline")
         await refreshData()
+      } else {
+        setError(data.error || "Failed to reset demo data.")
       }
     } catch (err) {
       console.error("Failed to reset demo data:", err)
+      setError(
+        err instanceof Error ? `Reset failed: ${err.message}` : "Reset failed."
+      )
     }
   }, [refreshData])
 
@@ -279,6 +309,8 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
         verificationReport,
         loading,
         isVerifying,
+        error,
+        announcement,
         tamperSimulation,
         selectedRecordForCrypto,
         isAddModalOpen,

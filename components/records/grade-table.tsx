@@ -35,6 +35,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select"
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -83,6 +84,9 @@ export function GradeTable() {
   const copyHash = (hash: string, id: string) => {
     navigator.clipboard.writeText(hash)
     setCopiedHashId(id)
+    toast.success("SHA-256 Digest Copied", {
+      description: `${hash.substring(0, 16)}... copied to clipboard.`,
+    })
     setTimeout(() => setCopiedHashId(null), 2000)
   }
 
@@ -91,11 +95,12 @@ export function GradeTable() {
       <CardHeader className="border-b border-border/60 pb-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <CardTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground">
+            <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
               Grade Ledger Records Browser
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
-              Explore all authenticated blocks in the append-only cryptographic ledger chain.
+              Explore all authenticated blocks in the append-only cryptographic
+              ledger chain.
             </CardDescription>
           </div>
 
@@ -127,10 +132,10 @@ export function GradeTable() {
             <MagnifyingGlass className="absolute left-3 size-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="SEARCH BY STUDENT, ID, CODE, HASH..."
+              placeholder="Search student, ID, course code, or hash..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 rounded-none border-border bg-transparent pl-9 font-mono text-xs uppercase text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
+              className="h-10 rounded-none border-border bg-transparent pl-9 font-mono text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
             />
           </div>
 
@@ -145,14 +150,19 @@ export function GradeTable() {
               <SelectTrigger className="h-10 w-full rounded-none border border-border bg-card px-3 font-sans text-xs text-foreground">
                 <SelectValue placeholder="All Courses">
                   {(() => {
-                    if (selectedCourse === "ALL") return `All Courses (${courses.length})`
+                    if (selectedCourse === "ALL")
+                      return `All Courses (${courses.length})`
                     const c = courses.find((item) => item.id === selectedCourse)
-                    return c ? `${c.course_code}: ${c.course_name}` : "All Courses"
+                    return c
+                      ? `${c.course_code}: ${c.course_name}`
+                      : "All Courses"
                   })()}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All Courses ({courses.length})</SelectItem>
+                <SelectItem value="ALL">
+                  All Courses ({courses.length})
+                </SelectItem>
                 {courses.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     {c.course_code}: {c.course_name}
@@ -192,7 +202,7 @@ export function GradeTable() {
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow className="border-b border-border bg-muted/40 font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+            <TableRow className="border-b border-border bg-muted/40 font-mono text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
               <TableHead className="px-4 py-3">Block</TableHead>
               <TableHead className="px-4 py-3">Student</TableHead>
               <TableHead className="px-4 py-3">Course</TableHead>
@@ -206,7 +216,10 @@ export function GradeTable() {
           <TableBody className="divide-y divide-border/60">
             {filteredRecords.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="py-12 text-center font-mono text-xs uppercase text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="py-12 text-center font-mono text-xs text-muted-foreground uppercase"
+                >
                   No matching grade records found.
                 </TableCell>
               </TableRow>
@@ -224,7 +237,7 @@ export function GradeTable() {
                   >
                     <TableCell className="px-4 py-3 font-mono font-semibold text-foreground">
                       #{rec.block_index}
-                      <span className="block font-mono text-[10px] font-normal text-muted-foreground">
+                      <span className="block font-mono text-[11px] font-normal text-muted-foreground">
                         {rec.id}
                       </span>
                     </TableCell>
@@ -232,7 +245,7 @@ export function GradeTable() {
                       <div className="font-medium text-foreground">
                         {rec.student?.name || rec.student_id}
                       </div>
-                      <div className="font-mono text-[10px] text-muted-foreground">
+                      <div className="font-mono text-[11px] text-muted-foreground">
                         ID: {rec.student?.student_id || rec.student_id}
                       </div>
                     </TableCell>
@@ -240,18 +253,13 @@ export function GradeTable() {
                       <div className="font-mono text-xs font-semibold text-foreground">
                         {rec.course?.course_code}
                       </div>
-                      <div className="max-w-[140px] truncate text-[10px] text-muted-foreground">
+                      <div className="max-w-[140px] truncate text-[11px] text-muted-foreground">
                         {rec.course?.course_name}
                       </div>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-center">
-                      <span
-                        className={`font-mono text-sm font-bold ${
-                          isTampered
-                            ? "text-destructive"
-                            : "text-primary"
-                        }`}
-                      >
+                      {/* ponytail: grade stays neutral; the StatusBadge is the single status signal */}
+                      <span className="font-mono text-sm font-bold text-foreground">
                         {rec.grade}
                       </span>
                     </TableCell>
@@ -260,7 +268,7 @@ export function GradeTable() {
                         <Key className="size-3 text-primary" />
                         <span>{rec.faculty?.name || rec.signed_by}</span>
                       </div>
-                      <div className="max-w-[120px] truncate font-mono text-[10px] text-muted-foreground">
+                      <div className="max-w-[120px] truncate font-mono text-[11px] text-muted-foreground">
                         {rec.signed_by}
                       </div>
                     </TableCell>
@@ -277,6 +285,7 @@ export function GradeTable() {
                           whileTap={{ y: 0 }}
                           transition={{ duration: 0.12 }}
                           className="cursor-pointer text-muted-foreground hover:text-foreground"
+                          aria-label="Copy full SHA-256 hash"
                           title="Copy full hash"
                         >
                           {copiedHashId === rec.id ? (
@@ -301,7 +310,7 @@ export function GradeTable() {
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedRecordForCrypto(rec)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[10px] font-semibold tracking-widest text-foreground uppercase transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
                         >
                           <Eye className="size-3 text-primary" />
                           <span>Inspect</span>

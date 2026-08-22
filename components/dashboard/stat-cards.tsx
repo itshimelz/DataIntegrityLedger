@@ -20,6 +20,7 @@ import {
   PopoverTitle,
   PopoverDescription,
 } from "@/components/ui/popover"
+import { toast } from "sonner"
 
 export function StatCards() {
   const { records, verificationReport, loading } = useLedger()
@@ -29,14 +30,19 @@ export function StatCards() {
   const latestBlock = records[records.length - 1]
   const headHash = latestBlock ? latestBlock.record_hash : "—"
 
-  const validCount = verificationReport?.valid ?? records.length
-  const invalidCount = verificationReport?.invalid ?? 0
-  const isTampered = invalidCount > 0
+  // ponytail: honest states — no report means nobody has audited; never fake counts
+  const audited = verificationReport !== null
+  const validCount = verificationReport?.valid ?? null
+  const invalidCount = verificationReport?.invalid ?? null
+  const isTampered = (invalidCount ?? 0) > 0
 
   const copyHeadHash = () => {
     if (headHash && headHash !== "—") {
       navigator.clipboard.writeText(headHash)
       setCopiedHash(true)
+      toast.success("Head Record Digest Copied", {
+        description: `${headHash.substring(0, 16)}... copied to clipboard.`,
+      })
       setTimeout(() => setCopiedHash(false), 2000)
     }
   }
@@ -60,10 +66,12 @@ export function StatCards() {
                 <span className="font-serif text-3xl font-bold tracking-tight text-foreground">
                   {loading ? "..." : totalRecords}
                 </span>
-                <span className="font-mono text-xs text-muted-foreground">blocks</span>
+                <span className="font-mono text-xs text-muted-foreground">
+                  blocks
+                </span>
               </div>
             </div>
-            <p className="mt-2 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+            <p className="mt-2 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
               Chain height: Block #{latestBlock?.block_index ?? 0}
             </p>
           </CardContent>
@@ -85,15 +93,23 @@ export function StatCards() {
               </div>
               <div className="mt-3 flex h-9 items-baseline gap-2">
                 <span className="font-serif text-3xl font-bold tracking-tight text-primary">
-                  {loading ? "..." : validCount}
+                  {loading
+                    ? "..."
+                    : (validCount ?? (
+                        <span className="text-muted-foreground">—</span>
+                      ))}
                 </span>
                 <span className="font-mono text-xs text-muted-foreground">
                   / {totalRecords} valid
                 </span>
               </div>
             </div>
-            <p className="mt-2 font-mono text-[10px] font-semibold text-primary uppercase tracking-wide">
-              SHA-256 + RSA-2048 valid
+            <p
+              className={`mt-2 font-mono text-[11px] tracking-wide uppercase ${audited ? "font-semibold text-primary" : "text-muted-foreground"}`}
+            >
+              {audited
+                ? "SHA-256 + RSA-2048 valid"
+                : "Run verification to confirm"}
             </p>
           </CardContent>
         </Card>
@@ -130,12 +146,14 @@ export function StatCards() {
               <div className="mt-3 flex h-9 items-baseline gap-2">
                 <span
                   className={`font-serif text-3xl font-bold tracking-tight ${
-                    isTampered
-                      ? "animate-pulse text-destructive"
-                      : "text-foreground"
+                    isTampered ? "text-destructive" : "text-foreground"
                   }`}
                 >
-                  {loading ? "..." : invalidCount}
+                  {loading
+                    ? "..."
+                    : (invalidCount ?? (
+                        <span className="text-muted-foreground">—</span>
+                      ))}
                 </span>
                 <span className="font-mono text-xs text-muted-foreground uppercase">
                   {isTampered ? "violations" : "tamper-free"}
@@ -143,7 +161,7 @@ export function StatCards() {
               </div>
             </div>
             <p
-              className={`mt-2 font-mono text-[10px] uppercase tracking-wide ${
+              className={`mt-2 font-mono text-[11px] tracking-wide uppercase ${
                 isTampered
                   ? "font-semibold text-destructive"
                   : "text-muted-foreground"
@@ -174,15 +192,23 @@ export function StatCards() {
                         whileHover={{ y: -1 }}
                         whileTap={{ y: 0 }}
                         transition={{ duration: 0.12 }}
-                        className="flex size-8 cursor-pointer items-center justify-center border border-border bg-muted/50 text-foreground transition-colors hover:border-primary"
+                        className="group relative flex size-8 cursor-pointer items-center justify-center border border-border bg-muted/50 text-foreground transition-all hover:border-primary/60 hover:bg-primary/5 hover:text-primary"
                       />
                     }
                   >
+                    <span
+                      aria-hidden
+                      className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
+                    />
                     <Hash className="size-4" weight="bold" />
                   </PopoverTrigger>
-                  <PopoverContent side="bottom" align="end" className="w-80 rounded-none border border-border bg-card p-4">
+                  <PopoverContent
+                    side="bottom"
+                    align="end"
+                    className="w-80 rounded-none border border-border bg-card p-4"
+                  >
                     <PopoverHeader>
-                      <PopoverTitle className="font-heading text-xs uppercase tracking-wider text-foreground">
+                      <PopoverTitle className="font-heading text-xs tracking-wider text-foreground uppercase">
                         Current Head Block
                       </PopoverTitle>
                       <PopoverDescription className="text-xs text-muted-foreground">
@@ -191,16 +217,20 @@ export function StatCards() {
                     </PopoverHeader>
                     <div className="mt-3 space-y-2 text-xs">
                       <div>
-                        <span className="block font-heading text-[9px] uppercase tracking-wider text-muted-foreground">
+                        <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
                           Block Index & ID
                         </span>
-                        <span className="font-mono text-xs text-foreground">#{latestBlock?.block_index} ({latestBlock?.id})</span>
+                        <span className="font-mono text-xs text-foreground">
+                          #{latestBlock?.block_index} ({latestBlock?.id})
+                        </span>
                       </div>
                       <div>
-                        <span className="block font-heading text-[9px] uppercase tracking-wider text-muted-foreground">
+                        <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
                           Full SHA-256 Digest
                         </span>
-                        <span className="font-mono text-[10px] break-all text-primary select-all">{headHash}</span>
+                        <span className="font-mono text-[11px] break-all text-primary select-all">
+                          {headHash}
+                        </span>
                       </div>
                     </div>
                   </PopoverContent>
@@ -219,9 +249,13 @@ export function StatCards() {
                   whileHover={{ y: -1 }}
                   whileTap={{ y: 0 }}
                   transition={{ duration: 0.12 }}
-                  className="flex h-7 cursor-pointer items-center gap-1 border border-border bg-muted/40 px-2 font-mono text-[10px] uppercase text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
+                  className="group relative flex h-7 cursor-pointer items-center gap-1 border border-border bg-muted/40 px-2 font-mono text-[11px] text-muted-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
                   title="Copy full 64-char SHA-256 hash"
                 >
+                  <span
+                    aria-hidden
+                    className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
+                  />
                   {copiedHash ? (
                     <Check className="size-3 text-primary" />
                   ) : (
@@ -231,7 +265,7 @@ export function StatCards() {
                 </motion.button>
               </div>
             </div>
-            <p className="mt-2 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+            <p className="mt-2 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
               Linked to preceding block
             </p>
           </CardContent>
@@ -240,4 +274,3 @@ export function StatCards() {
     </div>
   )
 }
-

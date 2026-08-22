@@ -18,11 +18,13 @@ export function VerificationChecklist() {
   return (
     <Card className="rounded-none border border-border bg-card">
       <CardHeader className="border-b border-border/60 pb-4">
-        <CardTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground">
+        <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
           Sequential Block Audit Checklist
         </CardTitle>
         <CardDescription className="text-xs text-muted-foreground">
-          Every ledger block undergoes three independent cryptographic assertions: Content SHA-256 Digest match, Sequential Hash Chain continuity, and RSA-2048 signature verification.
+          Every ledger block undergoes three independent cryptographic
+          assertions: Content SHA-256 Digest match, Sequential Hash Chain
+          continuity, and RSA-2048 signature verification.
         </CardDescription>
       </CardHeader>
 
@@ -51,7 +53,7 @@ export function VerificationChecklist() {
                   <div
                     className={`flex size-9 shrink-0 items-center justify-center border font-mono text-xs font-semibold ${
                       isTampered
-                        ? "border-destructive/40 bg-destructive text-destructive-foreground"
+                        ? "text-destructive-foreground border-destructive/40 bg-destructive"
                         : "border-primary/30 bg-primary/10 text-primary"
                     }`}
                   >
@@ -62,7 +64,7 @@ export function VerificationChecklist() {
                       <span className="text-xs font-medium text-foreground">
                         {rec.student?.name || rec.student_id}
                       </span>
-                      <span className="font-mono text-[10px] text-muted-foreground">
+                      <span className="font-mono text-[11px] text-muted-foreground">
                         ({rec.student?.student_id})
                       </span>
                       <span className="text-muted-foreground">•</span>
@@ -70,7 +72,7 @@ export function VerificationChecklist() {
                         {rec.course?.course_code}
                       </span>
                     </div>
-                    <div className="mt-0.5 flex items-center gap-3 font-mono text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <div className="mt-0.5 flex items-center gap-3 font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
                       <span>
                         Awarded Grade:{" "}
                         <strong className="font-mono text-xs font-bold text-foreground">
@@ -110,10 +112,10 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[10px] font-semibold tracking-wider uppercase">
+                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
                         1. SHA-256 Digest
                       </div>
-                      <div className="truncate font-mono text-[9px] uppercase tracking-tight opacity-80">
+                      <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
                         {v.hash_valid ? "Payload Match" : "Hash Mismatch"}
                       </div>
                     </div>
@@ -139,10 +141,10 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[10px] font-semibold tracking-wider uppercase">
+                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
                         2. Chain Linkage
                       </div>
-                      <div className="truncate font-mono text-[9px] uppercase tracking-tight opacity-80">
+                      <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
                         {v.chain_valid ? "prev_hash Valid" : "Broken Link"}
                       </div>
                     </div>
@@ -168,10 +170,10 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[10px] font-semibold tracking-wider uppercase">
+                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
                         3. RSA-2048 Sign
                       </div>
-                      <div className="truncate font-mono text-[9px] uppercase tracking-tight opacity-80">
+                      <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
                         {v.signature_valid ? "Faculty Valid" : "Invalid Sign"}
                       </div>
                     </div>
@@ -184,7 +186,7 @@ export function VerificationChecklist() {
                   <button
                     type="button"
                     onClick={() => setSelectedRecordForCrypto(rec)}
-                    className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[10px] font-semibold tracking-widest text-foreground uppercase transition-colors hover:bg-muted"
+                    className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-colors hover:bg-muted"
                   >
                     <Eye className="size-3 text-primary" />
                     <span>Inspect</span>
@@ -195,7 +197,8 @@ export function VerificationChecklist() {
               {/* Discrepancy Error Banner if Flagged */}
               {isTampered && v.error && (
                 <div className="mt-3 border border-destructive/30 bg-destructive/10 p-2.5 font-mono text-xs text-destructive">
-                  <strong className="uppercase">Verification Error:</strong> {v.error}
+                  <strong className="uppercase">Verification Error:</strong>{" "}
+                  {v.error}
                 </div>
               )}
             </div>

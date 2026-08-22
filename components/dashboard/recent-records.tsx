@@ -34,7 +34,7 @@ export function RecentRecords() {
     <Card className="rounded-none border border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-border/60 pb-4">
         <div>
-          <CardTitle className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground">
+          <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
             Recent Ledger Entries
           </CardTitle>
           <CardDescription className="text-xs text-muted-foreground">
@@ -55,7 +55,7 @@ export function RecentRecords() {
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow className="border-b border-border bg-muted/40 font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+            <TableRow className="border-b border-border bg-muted/40 font-mono text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
               <TableHead className="px-4 py-3">Block</TableHead>
               <TableHead className="px-4 py-3">Student</TableHead>
               <TableHead className="px-4 py-3">Course</TableHead>
@@ -68,7 +68,10 @@ export function RecentRecords() {
           <TableBody className="divide-y divide-border/60">
             {recentList.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="py-8 text-center font-mono text-xs uppercase text-muted-foreground">
+                <TableCell
+                  colSpan={7}
+                  className="py-8 text-center font-mono text-xs text-muted-foreground uppercase"
+                >
                   No ledger records found.
                 </TableCell>
               </TableRow>
@@ -91,7 +94,7 @@ export function RecentRecords() {
                       <div className="font-medium text-foreground">
                         {rec.student?.name || rec.student_id}
                       </div>
-                      <div className="font-mono text-[10px] text-muted-foreground">
+                      <div className="font-mono text-[11px] text-muted-foreground">
                         ID: {rec.student?.student_id || rec.student_id}
                       </div>
                     </TableCell>
@@ -99,18 +102,13 @@ export function RecentRecords() {
                       <div className="font-mono text-xs font-semibold text-foreground">
                         {rec.course?.course_code}
                       </div>
-                      <div className="max-w-[160px] truncate text-[10px] text-muted-foreground">
+                      <div className="max-w-[160px] truncate text-[11px] text-muted-foreground">
                         {rec.course?.course_name}
                       </div>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-center">
-                      <span
-                        className={`font-mono text-sm font-bold ${
-                          isTampered
-                            ? "text-destructive"
-                            : "text-primary"
-                        }`}
-                      >
+                      {/* ponytail: grade stays neutral; the StatusBadge is the single status signal */}
+                      <span className="font-mono text-sm font-bold text-foreground">
                         {rec.grade}
                       </span>
                     </TableCell>
@@ -119,7 +117,7 @@ export function RecentRecords() {
                         <Key className="size-3 text-primary" />
                         <span>{rec.faculty?.name || rec.signed_by}</span>
                       </div>
-                      <div className="max-w-[120px] truncate font-mono text-[10px] text-muted-foreground">
+                      <div className="max-w-[120px] truncate font-mono text-[11px] text-muted-foreground">
                         {rec.signed_by}
                       </div>
                     </TableCell>
@@ -137,7 +135,7 @@ export function RecentRecords() {
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedRecordForCrypto(rec)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[10px] font-semibold tracking-widest text-foreground uppercase transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
                         >
                           <Eye className="size-3 text-primary" />
                           <span>Inspect</span>
@@ -154,4 +152,3 @@ export function RecentRecords() {
     </Card>
   )
 }
-
