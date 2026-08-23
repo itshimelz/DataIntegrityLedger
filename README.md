@@ -45,8 +45,8 @@ The Data Integrity Ledger additionally asks: ***"Does the current database recor
 
 ```bash
 # Clone the repository
-git clone https://github.com/itshimelz/data-integrity-ledger.git
-cd data-integrity-ledger
+git clone https://github.com/itshimelz/DataIntegrityLedger.git
+cd DataIntegrityLedger
 
 # Install dependencies
 bun install
