@@ -1,4 +1,4 @@
-// Academic Integrity Ledger (AILedger) Prisma Schema
+// Data Integrity Ledger Prisma Schema
 // SRS §8 Database Design
 
 generator client {

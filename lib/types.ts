@@ -1,4 +1,4 @@
-// ponytail: minimal clean type definitions for AILedger MVP without unneeded layers
+// ponytail: minimal clean type definitions for Data Integrity Ledger MVP without unneeded layers
 
 export type Role = "FACULTY" | "REGISTRAR" | "ADMIN"
 

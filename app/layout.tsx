@@ -22,9 +22,9 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Academic Integrity Ledger | Tamper-Evident Grade Ledger",
+  title: "Data Integrity Ledger | Tamper-Evident Grade & Record Ledger",
   description:
-    "Tamper-evident academic grade management system with SHA-256 hash chaining and RSA-2048 digital signatures.",
+    "Tamper-evident academic grade and data integrity management system with SHA-256 hash chaining and RSA-2048 digital signatures.",
 }
 
 import { TooltipProvider } from "@/components/ui/tooltip"

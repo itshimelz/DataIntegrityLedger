@@ -36,3 +36,15 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloudflare / opennext
+.open-next/
+.wrangler/
+env.d.ts
+
+# private agent / product docs & tasks
+AGENTS.md
+PRODUCT.md
+agents.md
+product.md
+tasks/

@@ -1,5 +1,5 @@
 # Software Requirements Specification (SRS)
-## Academic Integrity Ledger — MVP
+## Data Integrity Ledger — MVP
 
 **Version:** 1.0  
 **Status:** MVP Specification  

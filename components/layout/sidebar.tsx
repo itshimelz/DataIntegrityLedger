@@ -107,14 +107,14 @@ export function AppSidebar({
             <div className="min-w-0 truncate">
               <div className="flex items-center gap-1.5">
                 <span className="font-serif text-sm font-bold tracking-tight text-white">
-                  AILedger
+                  Data Integrity Ledger
                 </span>
                 <span className="rounded-none border border-emerald-500/30 bg-emerald-500/20 px-1 font-mono text-[11px] font-semibold text-emerald-300">
                   v1.0
                 </span>
               </div>
               <p className="truncate font-heading text-[11px] font-medium tracking-widest text-emerald-400/70 uppercase">
-                Academic Ledger
+                Integrity Ledger
               </p>
             </div>
           </Link>

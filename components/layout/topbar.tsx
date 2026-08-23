@@ -53,7 +53,7 @@ export function Topbar() {
       <div className="flex items-center gap-2.5 text-xs">
         <SidebarTrigger className="-ml-1 text-foreground hover:bg-muted" />
         <span className="font-heading text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-          AILedger
+          Data Integrity Ledger
         </span>
         <CaretRight className="size-3 text-muted-foreground" />
         <span className="font-heading text-xs font-semibold tracking-wider text-foreground uppercase">

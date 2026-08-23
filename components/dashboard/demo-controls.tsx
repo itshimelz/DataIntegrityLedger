@@ -50,7 +50,8 @@ export function DemoControls() {
           "Verification complete: all checks passed (0 discrepancies)"
         )
         toast.success("Ledger Verification: 100% Valid", {
-          description: "All blocks passed canonical SHA-256 digests, sequential hash chaining, and RSA-2048 faculty signatures.",
+          description:
+            "All blocks passed canonical SHA-256 digests, sequential hash chaining, and RSA-2048 faculty signatures.",
         })
       } else {
         setLastActionStatus(

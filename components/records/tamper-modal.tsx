@@ -60,9 +60,12 @@ export function TamperModal() {
     setIsSubmitting(false)
 
     if (res.success) {
-      toast.error(`Tamper simulation committed on Block #${targetRecord.block_index}`, {
-        description: `Direct database record updated to grade ${tamperedGrade}. Run verification to detect cryptographic discrepancy.`,
-      })
+      toast.error(
+        `Tamper simulation committed on Block #${targetRecord.block_index}`,
+        {
+          description: `Direct database record updated to grade ${tamperedGrade}. Run verification to detect cryptographic discrepancy.`,
+        }
+      )
       setIsTamperModalOpen(false)
     } else {
       setError(res.error || "Failed to simulate tampering")
@@ -114,7 +117,7 @@ export function TamperModal() {
                 <code className="bg-muted px-1 font-mono text-foreground">
                   UPDATE
                 </code>{" "}
-                overwrites data invisibly. In AILedger, the stored SHA-256 hash
+                overwrites data invisibly. In Data Integrity Ledger, the stored SHA-256 hash
                 and RSA signature will immediately detect this modification on
                 verification.
               </div>

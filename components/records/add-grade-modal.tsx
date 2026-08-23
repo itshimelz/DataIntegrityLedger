@@ -97,7 +97,7 @@ export function AddGradeModal() {
     if (res.success && res.record) {
       const selectedStudent = students.find((s) => s.id === studentId)
       const selectedCourse = courses.find((c) => c.id === courseId)
-      
+
       toast.success(
         `Block #${res.record.block_index} signed and appended to ledger`,
         {
@@ -332,9 +332,7 @@ export function AddGradeModal() {
               disabled={isSubmitting}
               className="rounded-none bg-primary font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase hover:bg-primary/90"
             >
-              {isSubmitting
-                ? "Signing & Appending..."
-                : "Sign & Append Block"}
+              {isSubmitting ? "Signing & Appending..." : "Sign & Append Block"}
             </Button>
           </DialogFooter>
         </form>

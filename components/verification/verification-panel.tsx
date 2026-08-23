@@ -231,7 +231,9 @@ export function VerificationPanel() {
             <div className="mt-2 font-serif text-2xl font-bold text-foreground">
               {audited ? (
                 isTampered ? (
-                  <span className="text-destructive">{chainLinked} / {total} Linked</span>
+                  <span className="text-destructive">
+                    {chainLinked} / {total} Linked
+                  </span>
                 ) : (
                   `${chainLinked} / ${total} Linked`
                 )
