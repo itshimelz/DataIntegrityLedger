@@ -1,13 +1,15 @@
 /*
   Impeccable direction contract — Data Integrity Ledger landing (Supabase-style redesign)
   THESIS: The registrar ledger presented with the developer-platform confidence of supabase.com — dark, centered, evidence-first — instead of a brochure hero.
-  OWN-WORLD: Near-black #121212 ground, #171717 cards, hairline white/10 borders, brand green #3ecf8e, geometric sans headings (white first line, gray second), mono code panels, rounded-md controls.
+  OWN-WORLD: Supabase grammar driven entirely by theme tokens (bg-background, bg-card, text-primary…) so next-themes light/dark switching works; dark theme carries the original near-black palette, light theme the warm paper one.
   STORY: Visitor reads the one-line promise, sees the real dashboard mock, scans four product cards (ledger, signing, verification, tamper), and clicks through to the portal.
   FIRST VIEWPORT: Slim dark nav (wordmark, anchor links, Open Dashboard), centered announcement pill, two-line giant headline, subcopy, dual CTA, full-width dashboard mock in a glowing frame.
   FORM: Brief-pinned — the supabase.com landing grammar is the committed world; DILedger facts fill every slot, no fabricated customers or claims.
   FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
 */
 import type { Metadata } from "next"
+
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export const metadata: Metadata = {
   title: "Data Integrity Ledger — Tamper-evident grade records",
@@ -89,48 +91,60 @@ const ICONS = {
   lock: "M6 11h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1zM8 11V7a4 4 0 0 1 8 0v4",
   eye: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
   zap: "M13 2L4.5 13.5H11l-1 8.5L18.5 10.5H12l1-8.5z",
+  scroll:
+    "M8 3h10a2 2 0 0 1 2 2v12M8 3a2 2 0 0 0-2 2v14a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 3v14a2 2 0 0 1-2 2h12a2 2 0 0 0 2-2M11 8h6M11 12h6",
+  flask:
+    "M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 9V3M8.5 3h7M7.5 15h9",
+  heart:
+    "M12 20s-7.5-4.6-9.3-9.4C1.4 7 3.7 4 6.9 4c2 0 3.7 1.1 5.1 3 1.4-1.9 3-3 5.1-3 3.2 0 5.5 3 4.2 6.6C19.5 15.4 12 20 12 20z",
+  truck:
+    "M1 8h12v8H1zM13 11h4l3 3v2h-7M5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z",
 }
 
 const btnPrimary =
-  "inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md bg-[#3ecf8e] px-4 text-sm font-medium text-[#0f1712] transition-colors hover:bg-[#3ecf8e]/85 focus-visible:outline-2"
+  "inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/85 focus-visible:outline-2"
 
 const btnSecondary =
-  "inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md border border-white/15 bg-transparent px-4 text-sm font-medium text-white transition-colors hover:border-white/30 hover:bg-white/5 focus-visible:outline-2"
+  "inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md border border-border bg-transparent px-4 text-sm font-medium text-foreground transition-colors hover:border-muted-foreground/40 hover:bg-accent focus-visible:outline-2"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#121212] font-sans text-[#ededed] antialiased">
+    <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       {/* ── Nav ── */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#121212]/90 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:px-8">
           <div className="flex items-center gap-8">
             <a href="#" className="flex items-center gap-2.5">
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-[#3ecf8e] text-[#0f1712]">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Icon d={ICONS.chain} className="size-4" />
               </span>
-              <span className="hidden text-sm font-semibold tracking-tight whitespace-nowrap text-white min-[420px]:block">
+              <span className="hidden text-sm font-semibold tracking-tight whitespace-nowrap text-foreground min-[420px]:block">
                 Data Integrity Ledger
               </span>
             </a>
-            <div className="hidden items-center gap-6 text-sm text-[#898989] md:flex">
+            <div className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
               <a
                 href="#products"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-foreground"
               >
                 Products
               </a>
               <a
                 href="#verification"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-foreground"
               >
                 Verification
               </a>
-              <a href="#tamper" className="transition-colors hover:text-white">
+              <a href="#tamper" className="transition-colors hover:text-foreground">
                 Tamper Demo
+              </a>
+              <a href="/applications" className="transition-colors hover:text-foreground">
+                Applications
               </a>
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <a href="/verify" className={`${btnSecondary} max-sm:hidden`}>
               Run Verification
             </a>
@@ -148,32 +162,32 @@ export default function LandingPage() {
           className="pointer-events-none absolute top-[-200px] left-1/2 h-[500px] w-[900px] -translate-x-1/2 rounded-full opacity-[0.15]"
           style={{
             background:
-              "radial-gradient(closest-side, #3ecf8e 0%, transparent 100%)",
+              "radial-gradient(closest-side, var(--primary) 0%, transparent 100%)",
           }}
         />
         <div className="relative mx-auto max-w-6xl px-5 pt-20 pb-16 text-center md:px-8 md:pt-28 md:pb-20">
           <a
             href="#tamper"
-            className="rise inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#1c1c1c] py-1 pr-3 pl-1 text-xs text-[#ededed] transition-colors hover:border-[#3ecf8e]/40"
+            className="rise inline-flex items-center gap-2 rounded-full border border-border bg-popover py-1 pr-3 pl-1 text-xs text-foreground transition-colors hover:border-primary/40"
           >
-            <span className="rounded-full bg-[#3ecf8e]/15 px-2 py-0.5 font-medium text-[#3ecf8e]">
+            <span className="rounded-full bg-primary/15 px-2 py-0.5 font-medium text-primary">
               New
             </span>
             Append-only grade corrections are live
-            <Icon d={ICONS.arrow} className="size-3.5 text-[#898989]" />
+            <Icon d={ICONS.arrow} className="size-3.5 text-muted-foreground" />
           </a>
 
           <h1
-            className="rise mx-auto mt-6 max-w-3xl text-4xl leading-[1.05] font-medium tracking-tight text-balance text-white sm:text-6xl lg:text-7xl"
+            className="rise mx-auto mt-6 max-w-3xl text-4xl leading-[1.05] font-medium tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
             style={{ animationDelay: "80ms" }}
           >
             Grades written once.
             <br />
-            <span className="text-[#4d4d4d]">Proven forever.</span>
+            <span className="text-muted-foreground/50">Proven forever.</span>
           </h1>
 
           <p
-            className="rise mx-auto mt-6 max-w-xl text-base leading-relaxed text-[#898989] sm:text-lg"
+            className="rise mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
             style={{ animationDelay: "160ms" }}
           >
             The tamper-evident grade platform. Every record is sealed with a
@@ -205,22 +219,22 @@ export default function LandingPage() {
               className="absolute inset-x-8 -top-8 h-40 rounded-full opacity-20"
               style={{
                 background:
-                  "radial-gradient(closest-side, #3ecf8e 0%, transparent 100%)",
+                  "radial-gradient(closest-side, var(--primary) 0%, transparent 100%)",
               }}
             />
-            <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-2xl shadow-black/60">
+            <div className="relative overflow-hidden rounded-lg border border-border bg-card text-left shadow-2xl shadow-black/60">
               {/* window chrome */}
-              <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
-                <span className="size-2.5 rounded-full bg-white/10" />
-                <span className="size-2.5 rounded-full bg-white/10" />
-                <span className="size-2.5 rounded-full bg-white/10" />
-                <span className="ml-3 font-mono text-[11px] text-[#898989]">
+              <div className="flex items-center gap-1.5 border-b border-border px-4 py-2.5">
+                <span className="size-2.5 rounded-full bg-border" />
+                <span className="size-2.5 rounded-full bg-border" />
+                <span className="size-2.5 rounded-full bg-border" />
+                <span className="ml-3 font-mono text-[11px] text-muted-foreground">
                   diledger.app/dashboard
                 </span>
               </div>
               <div className="grid grid-cols-[180px_1fr] max-md:grid-cols-1">
                 {/* sidebar */}
-                <div className="hidden border-r border-white/10 p-4 max-md:hidden md:block">
+                <div className="hidden border-r border-border p-4 max-md:hidden md:block">
                   <div className="space-y-1 text-[13px]">
                     {[
                       ["Overview", true],
@@ -232,22 +246,22 @@ export default function LandingPage() {
                         key={label as string}
                         className={`rounded-md px-2.5 py-1.5 ${
                           active
-                            ? "bg-[#3ecf8e]/10 font-medium text-[#3ecf8e]"
-                            : "text-[#898989]"
+                            ? "bg-primary/10 font-medium text-primary"
+                            : "text-muted-foreground"
                         }`}
                       >
                         {label}
                       </div>
                     ))}
                   </div>
-                  <div className="mt-6 border-t border-white/10 pt-4">
-                    <p className="px-2.5 font-mono text-[10px] tracking-widest text-[#4d4d4d] uppercase">
+                  <div className="mt-6 border-t border-border pt-4">
+                    <p className="px-2.5 font-mono text-[10px] tracking-widest text-muted-foreground/50 uppercase">
                       Chain health
                     </p>
-                    <p className="mt-2 px-2.5 text-2xl font-semibold text-white">
+                    <p className="mt-2 px-2.5 text-2xl font-semibold text-foreground">
                       100%
                     </p>
-                    <p className="mt-1 px-2.5 text-[11px] text-[#3ecf8e]">
+                    <p className="mt-1 px-2.5 text-[11px] text-primary">
                       All blocks verified
                     </p>
                   </div>
@@ -263,19 +277,19 @@ export default function LandingPage() {
                     ].map(([label, value]) => (
                       <div
                         key={label}
-                        className="rounded-md border border-white/10 bg-[#1c1c1c] p-3"
+                        className="rounded-md border border-border bg-popover p-3"
                       >
-                        <p className="text-[11px] text-[#898989]">{label}</p>
-                        <p className="mt-1 text-lg font-semibold text-white">
+                        <p className="text-[11px] text-muted-foreground">{label}</p>
+                        <p className="mt-1 text-lg font-semibold text-foreground">
                           {value}
                         </p>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 overflow-hidden rounded-md border border-white/10">
+                  <div className="mt-3 overflow-hidden rounded-md border border-border">
                     <table className="w-full text-left text-[12px]">
                       <thead>
-                        <tr className="border-b border-white/10 bg-white/[0.03] text-[10px] tracking-wider text-[#898989] uppercase">
+                        <tr className="border-b border-border bg-muted/40 text-[10px] tracking-wider text-muted-foreground uppercase">
                           <th className="px-3 py-2 font-medium">Block</th>
                           <th className="px-3 py-2 font-medium">Student</th>
                           <th className="hidden px-3 py-2 font-medium sm:table-cell">
@@ -285,7 +299,7 @@ export default function LandingPage() {
                           <th className="px-3 py-2 font-medium">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-border/50">
                         {[
                           ["#1", "Rafiq Ahmed", "CSE 323", "B+", true],
                           ["#2", "Nusrat Jahan", "CSE 315", "A", true],
@@ -293,22 +307,22 @@ export default function LandingPage() {
                           ["#4", "Farhana Akter", "CSE 323", "B", true],
                         ].map(([n, student, course, grade, ok]) => (
                           <tr key={n as string}>
-                            <td className="px-3 py-2 font-mono text-[#898989]">
+                            <td className="px-3 py-2 font-mono text-muted-foreground">
                               {n}
                             </td>
-                            <td className="px-3 py-2 text-white">{student}</td>
-                            <td className="hidden px-3 py-2 text-[#898989] sm:table-cell">
+                            <td className="px-3 py-2 text-foreground">{student}</td>
+                            <td className="hidden px-3 py-2 text-muted-foreground sm:table-cell">
                               {course}
                             </td>
-                            <td className="px-3 py-2 font-mono font-semibold text-white">
+                            <td className="px-3 py-2 font-mono font-semibold text-foreground">
                               {grade}
                             </td>
                             <td className="px-3 py-2">
                               <span
                                 className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[10px] font-bold ${
                                   ok
-                                    ? "bg-[#3ecf8e]/10 text-[#3ecf8e]"
-                                    : "bg-red-500/10 text-red-400"
+                                    ? "bg-primary/10 text-primary"
+                                    : "bg-destructive/10 text-destructive"
                                 }`}
                               >
                                 <Icon
@@ -331,9 +345,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Standards strip ── */}
-      <section className="border-y border-white/10 bg-[#171717]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 py-6 font-mono text-xs text-[#898989] md:px-8">
-          <span className="text-[#4d4d4d]">Built on open standards:</span>
+      <section className="border-y border-border bg-card">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 py-6 font-mono text-xs text-muted-foreground md:px-8">
+          <span className="text-muted-foreground/50">Built on open standards:</span>
           {[
             "SHA-256",
             "RSA-2048",
@@ -354,30 +368,30 @@ export default function LandingPage() {
         id="products"
         className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24"
       >
-        <p className="font-mono text-xs font-medium tracking-widest text-[#3ecf8e] uppercase">
+        <p className="font-mono text-xs font-medium tracking-widest text-primary uppercase">
           Products
         </p>
-        <h2 className="mt-3 max-w-xl text-3xl font-medium tracking-tight text-balance text-white md:text-4xl">
+        <h2 className="mt-3 max-w-xl text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
           A complete integrity stack for academic records
         </h2>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {/* Ledger Database */}
-          <div className="flex flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-colors hover:border-white/20">
+          <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-muted-foreground/40">
             <div className="p-6 pb-4">
-              <span className="flex size-9 items-center justify-center rounded-md bg-[#3ecf8e]/10 text-[#3ecf8e]">
+              <span className="flex size-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                 <Icon d={ICONS.database} className="size-5" />
               </span>
-              <h3 className="mt-4 text-lg font-medium text-white">
+              <h3 className="mt-4 text-lg font-medium text-foreground">
                 Ledger Database
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#898989]">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Every grade is a block: a deterministic canonical payload,
                 reduced to SHA-256, storing its predecessor&apos;s digest.
                 Rewriting one block invalidates every block after it.
               </p>
             </div>
-            <pre className="mt-auto border-t border-white/10 bg-[#121212] p-4 font-mono text-[11px] leading-relaxed text-[#898989]">
+            <pre className="mt-auto border-t border-border bg-background p-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
               <code>{`{
   "block_index": 2,
   "course_id": "course-cse323",
@@ -391,25 +405,25 @@ export default function LandingPage() {
           </div>
 
           {/* Faculty Signing */}
-          <div className="flex flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-colors hover:border-white/20">
+          <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-muted-foreground/40">
             <div className="p-6 pb-4">
-              <span className="flex size-9 items-center justify-center rounded-md bg-[#3ecf8e]/10 text-[#3ecf8e]">
+              <span className="flex size-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                 <Icon d={ICONS.key} className="size-5" />
               </span>
-              <h3 className="mt-4 text-lg font-medium text-white">
+              <h3 className="mt-4 text-lg font-medium text-foreground">
                 Faculty Signing
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#898989]">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Each faculty signer holds an RSA-2048 key pair. Private keys
                 never leave the server; every digest is signed server-side and
                 verifiable against the registered public key.
               </p>
             </div>
-            <div className="mt-auto border-t border-white/10 bg-[#121212] p-4 font-mono text-[11px] leading-relaxed">
-              <p className="text-[#4d4d4d]">
+            <div className="mt-auto border-t border-border bg-background p-4 font-mono text-[11px] leading-relaxed">
+              <p className="text-muted-foreground/50">
                 # signature = RSA_SIGN(priv, record_hash)
               </p>
-              <p className="mt-1 text-[#3ecf8e]">
+              <p className="mt-1 text-primary">
                 RSA_VERIFY(pub, record_hash, signature) →{" "}
                 <span className="font-bold">VALID</span>
               </p>
@@ -419,29 +433,29 @@ export default function LandingPage() {
           {/* Full Verification */}
           <div
             id="verification"
-            className="flex flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-colors hover:border-white/20"
+            className="flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-muted-foreground/40"
           >
             <div className="p-6 pb-4">
-              <span className="flex size-9 items-center justify-center rounded-md bg-[#3ecf8e]/10 text-[#3ecf8e]">
+              <span className="flex size-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                 <Icon d={ICONS.shield} className="size-5" />
               </span>
-              <h3 className="mt-4 text-lg font-medium text-white">
+              <h3 className="mt-4 text-lg font-medium text-foreground">
                 Full Ledger Verification
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#898989]">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 One click replays the entire chain: recomputes every hash,
                 checks every link, verifies every signature — and names the
                 exact block and failed check when anything is off.
               </p>
             </div>
-            <div className="mt-auto border-t border-white/10 bg-[#121212] p-4 font-mono text-[11px] leading-relaxed">
-              <p className="text-[#4d4d4d]">$ POST /api/verification</p>
+            <div className="mt-auto border-t border-border bg-background p-4 font-mono text-[11px] leading-relaxed">
+              <p className="text-muted-foreground/50">$ POST /api/verification</p>
               <p className="mt-1">
-                <span className="text-[#3ecf8e]">✓</span> hash_valid{" "}
-                <span className="text-[#3ecf8e]">✓</span> chain_valid{" "}
-                <span className="text-[#3ecf8e]">✓</span> signature_valid
+                <span className="text-primary">✓</span> hash_valid{" "}
+                <span className="text-primary">✓</span> chain_valid{" "}
+                <span className="text-primary">✓</span> signature_valid
               </p>
-              <p className="mt-1 font-bold text-[#3ecf8e]">
+              <p className="mt-1 font-bold text-primary">
                 → STATUS: VERIFIED · 8/8 blocks authentic
               </p>
             </div>
@@ -450,29 +464,29 @@ export default function LandingPage() {
           {/* Tamper Detection */}
           <div
             id="tamper"
-            className="flex flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-colors hover:border-red-500/30"
+            className="flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-destructive/30"
           >
             <div className="p-6 pb-4">
-              <span className="flex size-9 items-center justify-center rounded-md bg-red-500/10 text-red-400">
+              <span className="flex size-9 items-center justify-center rounded-md bg-destructive/10 text-destructive">
                 <Icon d={ICONS.zap} className="size-5" />
               </span>
-              <h3 className="mt-4 text-lg font-medium text-white">
+              <h3 className="mt-4 text-lg font-medium text-foreground">
                 Tampering Detection
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#898989]">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 A direct SQL edit — the attack this system assumes — no longer
                 hides. The stored digest no longer matches the payload, and
                 verification flags the record for every later block to see.
               </p>
             </div>
-            <div className="mt-auto border-t border-white/10 bg-[#121212] p-4 font-mono text-[11px] leading-relaxed">
+            <div className="mt-auto border-t border-border bg-background p-4 font-mono text-[11px] leading-relaxed">
               <p>
-                <span className="text-[#898989]">stored grade:</span>{" "}
+                <span className="text-muted-foreground">stored grade:</span>{" "}
                 <span className="line-through">B+</span>{" "}
-                <span className="text-[#898989]">· db value:</span>{" "}
-                <span className="font-bold text-red-400">A+</span>
+                <span className="text-muted-foreground">· db value:</span>{" "}
+                <span className="font-bold text-destructive">A+</span>
               </p>
-              <p className="mt-1 text-red-400">
+              <p className="mt-1 text-destructive">
                 ✗ hash mismatch · ✗ signature invalid · FLAGGED
               </p>
             </div>
@@ -481,17 +495,17 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works: chain strip ── */}
-      <section className="border-y border-white/10 bg-[#171717]">
+      <section className="border-y border-border bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
           <div className="grid gap-10 md:grid-cols-[1fr_1.2fr] md:items-center">
             <div>
-              <p className="font-mono text-xs font-medium tracking-widest text-[#3ecf8e] uppercase">
+              <p className="font-mono text-xs font-medium tracking-widest text-primary uppercase">
                 How the evidence works
               </p>
-              <h2 className="mt-3 text-3xl font-medium tracking-tight text-balance text-white md:text-4xl">
+              <h2 className="mt-3 text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
                 Trust is not asserted. It is recomputed.
               </h2>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-[#898989]">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
                 Each block stores its predecessor&apos;s digest. Recompute any
                 record and the mismatch propagates to every later block — the
                 chain speaks for itself, no auditor required.
@@ -515,12 +529,12 @@ export default function LandingPage() {
                   ],
                 ].map(([icon, title, body]) => (
                   <li key={title as string} className="flex gap-3">
-                    <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-[#3ecf8e]/10 text-[#3ecf8e]">
+                    <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
                       <Icon d={icon as string} className="size-4" />
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-white">{title}</p>
-                      <p className="mt-0.5 text-sm text-[#898989]">{body}</p>
+                      <p className="text-sm font-medium text-foreground">{title}</p>
+                      <p className="mt-0.5 text-sm text-muted-foreground">{body}</p>
                     </div>
                   </li>
                 ))}
@@ -528,51 +542,51 @@ export default function LandingPage() {
             </div>
 
             {/* live chain strip */}
-            <figure className="overflow-hidden rounded-lg border border-white/10 bg-[#121212]">
-              <figcaption className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-                <span className="font-mono text-[11px] font-medium tracking-widest text-[#898989] uppercase">
+            <figure className="overflow-hidden rounded-lg border border-border bg-background">
+              <figcaption className="flex items-center justify-between border-b border-border px-4 py-2.5">
+                <span className="font-mono text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
                   Hash chain · demo dataset
                 </span>
-                <span className="font-mono text-[11px] text-[#3ecf8e]">
+                <span className="font-mono text-[11px] text-primary">
                   sha256
                 </span>
               </figcaption>
-              <ol className="divide-y divide-white/5">
+              <ol className="divide-y divide-border/50">
                 {CHAIN_ROWS.map((row) => (
                   <li key={row.n} className="px-4 py-3">
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="flex min-w-0 items-baseline gap-2">
-                        <span className="font-mono text-[11px] font-bold text-[#3ecf8e]/70">
+                        <span className="font-mono text-[11px] font-bold text-primary/70">
                           #{String(row.n).padStart(3, "0")}
                         </span>
-                        <span className="truncate text-xs font-medium text-white">
+                        <span className="truncate text-xs font-medium text-foreground">
                           {row.label}
                         </span>
                       </span>
-                      <span className="hidden shrink-0 font-mono text-[10px] text-[#4d4d4d] sm:block">
+                      <span className="hidden shrink-0 font-mono text-[10px] text-muted-foreground/50 sm:block">
                         {row.meta.split("·")[2]?.trim() ?? ""}
                       </span>
                     </div>
-                    <p className="mt-1 truncate text-[11px] text-[#898989]">
+                    <p className="mt-1 truncate text-[11px] text-muted-foreground">
                       {row.meta}
                     </p>
                     <div
                       className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 font-mono text-[10px] leading-relaxed"
                       title={`prev_hash ${row.prev}`}
                     >
-                      <span className="text-[#4d4d4d]">prev</span>
-                      <span className="truncate text-[#898989]">
+                      <span className="text-muted-foreground/50">prev</span>
+                      <span className="truncate text-muted-foreground">
                         {short(row.prev)}
                       </span>
-                      <span className="text-[#4d4d4d]">hash</span>
-                      <span className="truncate text-[#3ecf8e]">
+                      <span className="text-muted-foreground/50">hash</span>
+                      <span className="truncate text-primary">
                         {short(row.hash)}
                       </span>
                     </div>
                   </li>
                 ))}
               </ol>
-              <p className="border-t border-white/10 px-4 py-2.5 text-[11px] text-[#4d4d4d]">
+              <p className="border-t border-border px-4 py-2.5 text-[11px] text-muted-foreground/50">
                 Illustrative demo data · live verification recomputes every
                 block at /verify
               </p>
@@ -585,14 +599,14 @@ export default function LandingPage() {
       <section className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
         <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
           <div>
-            <p className="font-mono text-xs font-medium tracking-widest text-[#3ecf8e] uppercase">
+            <p className="font-mono text-xs font-medium tracking-widest text-primary uppercase">
               Honest limits
             </p>
-            <h2 className="mt-3 text-3xl font-medium tracking-tight text-balance text-white md:text-4xl">
+            <h2 className="mt-3 text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
               Tamper-evident is not tamper-proof.
             </h2>
           </div>
-          <ul className="divide-y divide-white/5 rounded-lg border border-white/10 bg-[#171717]">
+          <ul className="divide-y divide-border/50 rounded-lg border border-border bg-card">
             {[
               "Detection happens after the fact — a determined attacker with database access can still change a grade; they just cannot make it look authentic.",
               "Signature verification assumes key custody — a compromised faculty private key can produce valid-looking records.",
@@ -600,11 +614,11 @@ export default function LandingPage() {
             ].map((limit) => (
               <li
                 key={limit}
-                className="flex gap-3 px-5 py-4 text-sm leading-relaxed text-[#898989]"
+                className="flex gap-3 px-5 py-4 text-sm leading-relaxed text-muted-foreground"
               >
                 <span
                   aria-hidden
-                  className="mt-2 size-1.5 shrink-0 rounded-full bg-[#3ecf8e]"
+                  className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
                 />
                 {limit}
               </li>
@@ -613,21 +627,68 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Beyond grades: applications teaser ── */}
+      <section className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
+        <div className="grid gap-10 md:grid-cols-[1fr_1.2fr] md:items-center">
+          <div>
+            <p className="font-mono text-xs font-medium tracking-widest text-primary uppercase">
+              Beyond grades
+            </p>
+            <h2 className="mt-3 max-w-md text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
+              The same seal works on more than grades.
+            </h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+              Nothing in the chain knows what a grade is. Swap the payload and
+              the identical hash-link-sign-verify machinery protects transcripts,
+              research data, medical records, supply chains, and land registries.
+            </p>
+            <a
+              href="/applications"
+              className={`${btnSecondary} mt-8`}
+            >
+              Explore all applications
+              <Icon d={ICONS.arrow} className="size-4" />
+            </a>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {[
+              [ICONS.scroll, "Transcripts & degrees", "Re-provable years after issuance"],
+              [ICONS.flask, "Research data", "Lab results timestamped into the chain"],
+              [ICONS.heart, "Medical records", "Clinician-signed patient histories"],
+              [ICONS.truck, "Supply chains", "Custody provenance that breaks when forged"],
+            ].map(([icon, title, body]) => (
+              <li
+                key={title as string}
+                className="rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/30"
+              >
+                <span className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <Icon d={icon as string} className="size-4" />
+                </span>
+                <p className="mt-3 text-sm font-medium text-foreground">{title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* ── CTA ── */}
-      <section className="relative overflow-hidden border-t border-white/10">
+      <section className="relative overflow-hidden border-t border-border">
         <div
           aria-hidden
           className="pointer-events-none absolute bottom-[-260px] left-1/2 h-[420px] w-[800px] -translate-x-1/2 rounded-full opacity-[0.12]"
           style={{
             background:
-              "radial-gradient(closest-side, #3ecf8e 0%, transparent 100%)",
+              "radial-gradient(closest-side, var(--primary) 0%, transparent 100%)",
           }}
         />
         <div className="relative mx-auto max-w-6xl px-5 py-20 text-center md:px-8 md:py-28">
-          <h2 className="mx-auto max-w-2xl text-3xl font-medium tracking-tight text-balance text-white md:text-5xl">
+          <h2 className="mx-auto max-w-2xl text-3xl font-medium tracking-tight text-balance text-foreground md:text-5xl">
             Open the ledger. Run your first verification.
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base text-[#898989]">
+          <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground">
             The seeded demo dataset, the tamper simulation, and the full
             verification runner are one click away.
           </p>
@@ -644,18 +705,18 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-white/10 bg-[#171717]">
+      <footer className="border-t border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 md:grid-cols-4 md:px-8">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="flex size-7 items-center justify-center rounded-md bg-[#3ecf8e] text-[#0f1712]">
+              <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Icon d={ICONS.chain} className="size-4" />
               </span>
-              <span className="text-sm font-semibold text-white">
+              <span className="text-sm font-semibold text-foreground">
                 Data Integrity Ledger
               </span>
             </div>
-            <p className="mt-4 text-xs leading-relaxed text-[#898989]">
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               Tamper-evident academic grade records. Detection over prevention,
               evidence over assertion.
             </p>
@@ -680,6 +741,7 @@ export default function LandingPage() {
             [
               "Project",
               [
+                ["Applications beyond grades", "/applications"],
                 ["SRS specification", "#"],
                 ["Honest limits", "#tamper"],
                 ["Course project MVP", "#"],
@@ -687,7 +749,7 @@ export default function LandingPage() {
             ],
           ].map(([title, links]) => (
             <div key={title as string}>
-              <p className="font-mono text-[11px] font-medium tracking-widest text-[#4d4d4d] uppercase">
+              <p className="font-mono text-[11px] font-medium tracking-widest text-muted-foreground/50 uppercase">
                 {title}
               </p>
               <ul className="mt-4 space-y-2.5 text-sm">
@@ -695,7 +757,7 @@ export default function LandingPage() {
                   <li key={label}>
                     <a
                       href={href}
-                      className="text-[#898989] transition-colors hover:text-white"
+                      className="text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {label}
                     </a>
@@ -705,8 +767,8 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-4 font-mono text-[11px] text-[#4d4d4d] md:px-8">
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-4 font-mono text-[11px] text-muted-foreground/50 md:px-8">
             <span>Data Integrity Ledger · course project MVP</span>
             <span>SHA-256 · RSA-2048 · node:crypto</span>
           </div>
