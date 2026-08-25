@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { supabaseLedger } from "@/lib/supabase/ledger"
-import { getAuthenticatedUser } from "@/lib/supabase/server"
+import { getAuthenticatedUser, requireRole } from "@/lib/supabase/server"
 import { decryptPrivateKey } from "@/lib/supabase/secretbox"
 
 /**
@@ -20,6 +20,14 @@ function resolveSignerPrivateKey(
 }
 
 export async function GET() {
+  // NFR-01: ledger reads are session-gated — no anonymous access to grades or audit events
+  const user = await getAuthenticatedUser()
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Authentication required" },
+      { status: 401 }
+    )
+  }
   try {
     const [rawRecords, students, courses, faculty, auditEvents] =
       await Promise.all([
@@ -78,14 +86,10 @@ export async function GET() {
 
 // FR-07 Grade Editing: append-only correction, never an in-place update
 export async function PATCH(req: Request) {
-  // FR-02: authorization enforced server-side — never trust client role claims
-  const user = await getAuthenticatedUser()
-  if (!user) {
-    return NextResponse.json(
-      { success: false, error: "Authentication required" },
-      { status: 401 }
-    )
-  }
+  // FR-02: only FACULTY may append ledger corrections — server-side role check
+  const auth = await requireRole(["FACULTY"])
+  if (auth.error) return auth.error
+  const user = auth.user
   try {
     const body = await req.json()
     const { record_id, new_grade } = body
@@ -130,14 +134,10 @@ export async function PATCH(req: Request) {
 
 // ponytail: DELETE intentionally absent — the ledger is append-only by design
 export async function POST(req: Request) {
-  // FR-02: only authenticated faculty sessions may append ledger records
-  const user = await getAuthenticatedUser()
-  if (!user) {
-    return NextResponse.json(
-      { success: false, error: "Authentication required" },
-      { status: 401 }
-    )
-  }
+  // FR-02: only FACULTY may append ledger records — server-side role check
+  const auth = await requireRole(["FACULTY"])
+  if (auth.error) return auth.error
+  const user = auth.user
   try {
     const body = await req.json()
     const { student_id, course_id, grade } = body

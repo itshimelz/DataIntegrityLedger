@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server"
 import { supabaseLedger } from "@/lib/supabase/ledger"
-import { getAuthenticatedUser } from "@/lib/supabase/server"
+import { requireRole } from "@/lib/supabase/server"
 
 export async function POST(req: Request) {
-  // FR-14: demo-only simulation — still requires an authenticated session
-  const user = await getAuthenticatedUser()
-  if (!user) {
+  // SRS §21: the tamper simulation only runs when explicitly enabled for demos
+  if (process.env.ENABLE_TAMPER_DEMO !== "true") {
     return NextResponse.json(
-      { success: false, error: "Authentication required" },
-      { status: 401 }
+      {
+        success: false,
+        error:
+          "Tamper demo is disabled — set ENABLE_TAMPER_DEMO=true to enable (SRS §21)",
+      },
+      { status: 403 }
     )
   }
+  // FR-14: demo-only, destructive — restricted to FACULTY/ADMIN sessions
+  const auth = await requireRole(["FACULTY", "ADMIN"])
+  if (auth.error) return auth.error
   try {
     const body = await req.json()
     const { target, newGrade } = body

@@ -32,15 +32,15 @@
   --chart-4: oklch(0.52 0.105 223.128);
   --chart-5: oklch(0.45 0.085 224.283);
   --radius: 0.5rem;
-  /* sidebar keeps the dark rail in both themes (Supabase dashboard style) */
-  --sidebar: #171717;
-  --sidebar-foreground: #ededed;
-  --sidebar-primary: #3ecf8e;
-  --sidebar-primary-foreground: #0f1712;
-  --sidebar-accent: #1c1c1c;
-  --sidebar-accent-foreground: #ededed;
-  --sidebar-border: #2e2e2e;
-  --sidebar-ring: #3ecf8e;
+  /* sidebar follows the theme: warm paper rail in light, near-black rail in dark */
+  --sidebar: oklch(0.955 0.004 95);
+  --sidebar-foreground: oklch(0.25 0.005 49.25);
+  --sidebar-primary: oklch(0.43 0.11 165.612);
+  --sidebar-primary-foreground: oklch(0.985 0.01 166.113);
+  --sidebar-accent: oklch(0.925 0.006 95);
+  --sidebar-accent-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-border: oklch(0.893 0.005 48.717);
+  --sidebar-ring: oklch(0.43 0.11 165.612);
 }
 
 .dark {

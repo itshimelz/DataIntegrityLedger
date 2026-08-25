@@ -101,7 +101,7 @@ export function AppSidebar({
             </div>
             <div className="min-w-0 truncate">
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-semibold tracking-tight text-white">
+                <span className="text-sm font-semibold tracking-tight text-sidebar-foreground">
                   Data Integrity Ledger
                 </span>
                 <span className="rounded-md border border-primary/30 bg-primary/20 px-1 font-mono text-[11px] font-semibold text-primary">
@@ -113,14 +113,14 @@ export function AppSidebar({
               </p>
             </div>
           </Link>
-          <SidebarTrigger className="h-8 w-8 shrink-0 rounded-md border border-sidebar-border bg-sidebar-accent text-stone-400 hover:border-primary/40 hover:bg-sidebar-accent hover:text-primary" />
+          <SidebarTrigger className="h-8 w-8 shrink-0 rounded-md border border-sidebar-border bg-sidebar-accent text-muted-foreground hover:border-primary/40 hover:bg-sidebar-accent hover:text-primary" />
         </div>
       </SidebarHeader>
 
       <SidebarContent className="space-y-1 p-0 group-data-[collapsible=icon]:p-0">
         {/* Navigation Portals Group */}
         <SidebarGroup className="p-2 group-data-[collapsible=icon]:p-2">
-          <SidebarGroupLabel className="text-[11px] font-semibold tracking-wider text-stone-400 uppercase group-data-[collapsible=icon]:hidden">
+          <SidebarGroupLabel className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase group-data-[collapsible=icon]:hidden">
             Ledger Portals
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -142,13 +142,13 @@ export function AppSidebar({
                         "rounded-md text-xs font-medium transition-colors",
                         isActive
                           ? "border border-primary/40 bg-primary/10 font-semibold text-primary"
-                          : "text-stone-300 hover:bg-sidebar-accent hover:text-white"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                       )}
                     >
                       <Icon
                         className={cn(
                           "size-4 shrink-0",
-                          isActive ? "text-primary" : "text-stone-400"
+                          isActive ? "text-primary" : "text-muted-foreground"
                         )}
                         weight={isActive ? "fill" : "bold"}
                       />
@@ -208,7 +208,7 @@ export function AppSidebar({
                       side: "right",
                       align: "center",
                     }}
-                    className="h-10 rounded-md border border-sidebar-border bg-sidebar-accent px-2.5 py-1 text-sidebar-foreground transition-colors group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-0! hover:border-primary/40 hover:bg-sidebar-accent hover:text-white data-[state=open]:border-primary/50 data-[state=open]:bg-sidebar-accent"
+                    className="h-10 rounded-md border border-sidebar-border bg-sidebar-accent px-2.5 py-1 text-sidebar-foreground transition-colors group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-0! hover:border-primary/40 hover:bg-sidebar-accent hover:text-sidebar-foreground data-[state=open]:border-primary/50 data-[state=open]:bg-sidebar-accent"
                   />
                 }
               >
@@ -217,16 +217,16 @@ export function AppSidebar({
                 </div>
                 <div className="grid min-w-0 flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
                   <div className="flex items-center gap-1.5">
-                    <span className="truncate text-xs font-semibold text-white">
+                    <span className="truncate text-xs font-semibold text-sidebar-foreground">
                       {displayName}
                     </span>
                     <span className="size-1.5 shrink-0 rounded-full bg-primary" />
                   </div>
-                  <span className="truncate font-mono text-[11px] text-stone-400">
+                  <span className="truncate font-mono text-[11px] text-muted-foreground">
                     {displayEmail}
                   </span>
                 </div>
-                <CaretUpDown className="ml-auto size-3.5 shrink-0 text-stone-400 group-data-[collapsible=icon]:hidden" />
+                <CaretUpDown className="ml-auto size-3.5 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
               </PopoverTrigger>
 
               <PopoverContent
