@@ -50,6 +50,7 @@ export interface GradeRecord {
   signature: string
   signed_by: string // Faculty User ID
   created_at: string
+  corrects_record_id?: string // FR-07: set when this block appends a correction to an earlier record
 }
 
 export interface AuditEvent {
@@ -74,6 +75,7 @@ export interface CanonicalRecordPayload {
   prev_hash: string
   signed_by: string
   created_at: string
+  corrects_record_id?: string
 }
 
 export interface VerificationResult {

@@ -58,14 +58,14 @@ export function VerificationPanel() {
   return (
     <div className="space-y-6">
       {/* Top Banner: Verification Audit Runner */}
-      <Card className="rounded-none border border-border bg-card">
+      <Card className="rounded-md border border-border bg-card">
         <CardContent className="p-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-start gap-4">
               <div
                 className={`flex size-12 shrink-0 items-center justify-center border ${
                   isTampered
-                    ? "text-destructive-foreground border-destructive/40 bg-destructive"
+                    ? "border-destructive/40 bg-destructive text-destructive-foreground"
                     : "border-primary/40 bg-primary text-primary-foreground"
                 }`}
               >
@@ -77,7 +77,7 @@ export function VerificationPanel() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-heading text-base font-semibold tracking-wider text-foreground uppercase">
+                  <h2 className="text-base font-semibold tracking-tight text-foreground">
                     {isTampered ? (
                       <>
                         Ledger Chain Flagged:{" "}
@@ -138,7 +138,7 @@ export function VerificationPanel() {
                 whileHover={!isVerifying ? { y: -1 } : undefined}
                 whileTap={!isVerifying ? { y: 0 } : undefined}
                 transition={{ duration: 0.12 }}
-                className="group relative inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-none bg-primary px-5 py-3 font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase transition-all hover:bg-primary/90 disabled:opacity-80"
+                className="group relative inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-md bg-primary px-5 py-3 text-xs font-semibold tracking-wider text-primary-foreground uppercase transition-all hover:bg-primary/90 disabled:opacity-80"
               >
                 <span
                   aria-hidden
@@ -203,13 +203,13 @@ export function VerificationPanel() {
 
       {/* Verification Breakdown Metrics */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card className="rounded-none border border-border bg-card">
+        <Card className="rounded-md border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
               <FileText className="size-4 text-primary" />
               <span>1. Payload Content Integrity</span>
             </div>
-            <div className="mt-2 font-serif text-2xl font-bold text-foreground">
+            <div className="mt-2 text-2xl font-bold tracking-tight text-foreground">
               {audited ? (
                 `${valid} / ${total} Match`
               ) : (
@@ -222,13 +222,13 @@ export function VerificationPanel() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-none border border-border bg-card">
+        <Card className="rounded-md border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
               <Fingerprint className="size-4 text-primary" />
               <span>2. Hash Chain Continuity</span>
             </div>
-            <div className="mt-2 font-serif text-2xl font-bold text-foreground">
+            <div className="mt-2 text-2xl font-bold tracking-tight text-foreground">
               {audited ? (
                 isTampered ? (
                   <span className="text-destructive">
@@ -247,13 +247,13 @@ export function VerificationPanel() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-none border border-border bg-card">
+        <Card className="rounded-md border border-border bg-card">
           <CardContent className="p-5">
-            <div className="flex items-center gap-2 font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
               <LockKey className="size-4 text-primary" />
               <span>3. Cryptographic Authenticity</span>
             </div>
-            <div className="mt-2 font-serif text-2xl font-bold text-foreground">
+            <div className="mt-2 text-2xl font-bold tracking-tight text-foreground">
               {audited ? (
                 `${signaturesValid} / ${total} Signed`
               ) : (

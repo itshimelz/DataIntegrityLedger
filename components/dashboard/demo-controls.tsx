@@ -76,11 +76,11 @@ export function DemoControls() {
   }
 
   return (
-    <Card className="rounded-none border border-border bg-card">
+    <Card className="rounded-md border border-border bg-card">
       <CardHeader className="border-b border-border/60 pb-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+            <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
               Demonstration & Audit Actions
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -122,7 +122,7 @@ export function DemoControls() {
               className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
             />
             <div>
-              <div className="font-heading text-xs font-semibold tracking-widest uppercase">
+              <div className="text-xs font-semibold uppercase tracking-wider">
                 {isVerifying ? "Scanning Chain..." : "Run Verification"}
               </div>
               <div className="mt-0.5 font-mono text-[11px] text-primary-foreground/80">
@@ -188,7 +188,7 @@ export function DemoControls() {
               className="arc-border arc-border-destructive opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
             />
             <div>
-              <div className="font-heading text-xs font-semibold tracking-widest uppercase">
+              <div className="text-xs font-semibold uppercase tracking-wider">
                 Simulate Tamper
               </div>
               <div className="mt-0.5 font-mono text-[11px] text-destructive/80">
@@ -212,7 +212,7 @@ export function DemoControls() {
               className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
             />
             <div>
-              <div className="font-heading text-xs font-semibold tracking-widest uppercase">
+              <div className="text-xs font-semibold uppercase tracking-wider">
                 Add Grade Record
               </div>
               <div className="mt-0.5 font-mono text-[11px] text-muted-foreground">
@@ -237,7 +237,7 @@ export function DemoControls() {
               className="arc-border opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100"
             />
             <div>
-              <div className="font-heading text-xs font-semibold tracking-widest uppercase">
+              <div className="text-xs font-semibold uppercase tracking-wider">
                 Reset Demo Data
               </div>
               <div className="mt-0.5 font-mono text-[11px] text-muted-foreground">
@@ -254,9 +254,9 @@ export function DemoControls() {
 
       {/* Destructive-action confirmation */}
       <Dialog open={isResetConfirmOpen} onOpenChange={setIsResetConfirmOpen}>
-        <DialogContent className="max-w-sm rounded-none border border-border bg-card p-6">
+        <DialogContent className="max-w-sm rounded-md border border-border bg-card p-6">
           <DialogHeader>
-            <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+            <DialogTitle className="text-sm font-semibold tracking-tight text-foreground">
               Reset demo dataset?
             </DialogTitle>
             <DialogDescription className="text-xs leading-relaxed text-muted-foreground">
@@ -271,7 +271,7 @@ export function DemoControls() {
               variant="outline"
               size="sm"
               onClick={() => setIsResetConfirmOpen(false)}
-              className="rounded-none"
+              className="rounded-md"
             >
               Cancel
             </Button>
@@ -281,7 +281,7 @@ export function DemoControls() {
               size="sm"
               onClick={handleReset}
               disabled={loading}
-              className="gap-1.5 rounded-none bg-destructive/10 text-destructive hover:bg-destructive/20"
+              className="gap-1.5 rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20"
             >
               <ArrowClockwise
                 className={`size-3.5 ${loading ? "animate-spin" : ""}`}

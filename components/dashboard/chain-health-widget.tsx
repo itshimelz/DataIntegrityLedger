@@ -31,12 +31,12 @@ export function ChainHealthWidget() {
 
   return (
     <>
-      <Card className="rounded-none border border-border bg-card">
+      <Card className="rounded-md border border-border bg-card">
         <CardHeader className="border-b border-border/60 pb-3">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+                <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
                   Cryptographic Hash Chain Sequence
                 </CardTitle>
                 <span className="border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[11px] font-semibold text-primary uppercase">
@@ -56,7 +56,7 @@ export function ChainHealthWidget() {
               variant="outline"
               size="sm"
               onClick={() => handleOpenExplorer()}
-              className="h-7 cursor-pointer gap-1.5 rounded-none border-border bg-card px-2.5 font-heading text-[11px] tracking-wider text-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+              className="h-7 cursor-pointer gap-1.5 rounded-md border-border bg-card px-2.5 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
             >
               <ArrowsOut className="size-3.5 text-primary" weight="bold" />
               <span>Expand Visual Explorer</span>

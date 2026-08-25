@@ -10,6 +10,7 @@ import {
   Plus,
   Copy,
   Check,
+  PencilSimpleLine,
 } from "@phosphor-icons/react"
 import { useLedger } from "@/hooks/use-ledger"
 import { StatusBadge } from "@/components/common/status-badge"
@@ -46,6 +47,7 @@ export function GradeTable() {
     setSelectedRecordForCrypto,
     setIsAddModalOpen,
     setIsTamperModalOpen,
+    setRecordToEdit,
   } = useLedger()
 
   const [searchQuery, setSearchQuery] = useState<string>("")
@@ -91,11 +93,11 @@ export function GradeTable() {
   }
 
   return (
-    <Card className="rounded-none border border-border bg-card">
+    <Card className="rounded-md border border-border bg-card">
       <CardHeader className="border-b border-border/60 pb-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+            <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
               Grade Ledger Records Browser
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -109,7 +111,7 @@ export function GradeTable() {
               variant="outline"
               size="sm"
               onClick={() => setIsTamperModalOpen(true)}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-none border border-destructive/40 bg-destructive/10 px-3 py-2 font-heading text-xs font-semibold tracking-widest text-destructive uppercase transition-colors hover:bg-destructive/20 active:translate-y-px"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 active:translate-y-px"
             >
               <Bug className="size-3.5" weight="bold" />
               <span>Simulate Tamper</span>
@@ -117,7 +119,7 @@ export function GradeTable() {
             <Button
               size="sm"
               onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-none border border-transparent bg-primary px-4 py-2 font-heading text-xs font-semibold tracking-widest text-primary-foreground uppercase transition-colors hover:bg-primary/90 active:translate-y-px"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-transparent bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:translate-y-px"
             >
               <Plus className="size-3.5" weight="bold" />
               <span>Add Record</span>
@@ -135,7 +137,7 @@ export function GradeTable() {
               placeholder="Search student, ID, course code, or hash..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 rounded-none border-border bg-transparent pl-9 font-mono text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
+              className="h-10 rounded-md border-border bg-transparent pl-9 font-mono text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
             />
           </div>
 
@@ -147,7 +149,7 @@ export function GradeTable() {
                 if (typeof val === "string") setSelectedCourse(val)
               }}
             >
-              <SelectTrigger className="h-10 w-full rounded-none border border-border bg-card px-3 font-sans text-xs text-foreground">
+              <SelectTrigger className="h-10 w-full rounded-md border border-border bg-card px-3 font-sans text-xs text-foreground">
                 <SelectValue placeholder="All Courses">
                   {(() => {
                     if (selectedCourse === "ALL")
@@ -180,7 +182,7 @@ export function GradeTable() {
                 if (typeof val === "string") setSelectedStatus(val)
               }}
             >
-              <SelectTrigger className="h-10 w-full rounded-none border border-border bg-card px-3 font-sans text-xs text-foreground">
+              <SelectTrigger className="h-10 w-full rounded-md border border-border bg-card px-3 font-sans text-xs text-foreground">
                 <SelectValue placeholder="All Statuses">
                   {selectedStatus === "ALL"
                     ? "All Verification Statuses"
@@ -203,14 +205,14 @@ export function GradeTable() {
         <Table>
           <TableHeader>
             <TableRow className="border-b border-border bg-muted/40 font-mono text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-              <TableHead className="px-4 py-3">Block</TableHead>
-              <TableHead className="px-4 py-3">Student</TableHead>
-              <TableHead className="px-4 py-3">Course</TableHead>
-              <TableHead className="px-4 py-3 text-center">Grade</TableHead>
-              <TableHead className="px-4 py-3">Faculty Signer</TableHead>
-              <TableHead className="px-4 py-3">SHA-256 Digest</TableHead>
-              <TableHead className="px-4 py-3">Status</TableHead>
-              <TableHead className="px-4 py-3 text-right">Actions</TableHead>
+              <TableHead className="px-3 py-3">Block</TableHead>
+              <TableHead className="px-3 py-3">Student</TableHead>
+              <TableHead className="px-3 py-3">Course</TableHead>
+              <TableHead className="px-3 py-3 text-center">Grade</TableHead>
+              <TableHead className="px-3 py-3">Faculty Signer</TableHead>
+              <TableHead className="px-3 py-3">SHA-256 Digest</TableHead>
+              <TableHead className="px-3 py-3">Status</TableHead>
+              <TableHead className="px-3 py-3 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-border/60">
@@ -235,13 +237,13 @@ export function GradeTable() {
                       isTampered ? "bg-destructive/10" : ""
                     }`}
                   >
-                    <TableCell className="px-4 py-3 font-mono font-semibold text-foreground">
+                    <TableCell className="px-3 py-3 font-mono font-semibold text-foreground">
                       #{rec.block_index}
                       <span className="block font-mono text-[11px] font-normal text-muted-foreground">
                         {rec.id}
                       </span>
                     </TableCell>
-                    <TableCell className="px-4 py-3">
+                    <TableCell className="px-3 py-3">
                       <div className="font-medium text-foreground">
                         {rec.student?.name || rec.student_id}
                       </div>
@@ -249,7 +251,7 @@ export function GradeTable() {
                         ID: {rec.student?.student_id || rec.student_id}
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3">
+                    <TableCell className="px-3 py-3">
                       <div className="font-mono text-xs font-semibold text-foreground">
                         {rec.course?.course_code}
                       </div>
@@ -257,26 +259,30 @@ export function GradeTable() {
                         {rec.course?.course_name}
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-center">
+                    <TableCell className="px-3 py-3 text-center">
                       {/* ponytail: grade stays neutral; the StatusBadge is the single status signal */}
                       <span className="font-mono text-sm font-bold text-foreground">
                         {rec.grade}
                       </span>
+                      {rec.corrects_record_id && (
+                        <span className="block font-mono text-[10px] font-normal text-primary">
+                          ↺ corrects {rec.corrects_record_id}
+                        </span>
+                      )}
                     </TableCell>
-                    <TableCell className="px-4 py-3">
+                    <TableCell className="px-3 py-3">
                       <div className="flex items-center gap-1.5 text-foreground">
-                        <Key className="size-3 text-primary" />
-                        <span>{rec.faculty?.name || rec.signed_by}</span>
-                      </div>
-                      <div className="max-w-[120px] truncate font-mono text-[11px] text-muted-foreground">
-                        {rec.signed_by}
+                        <Key className="size-3 shrink-0 text-primary" />
+                        <span className="max-w-[110px] truncate">
+                          {rec.faculty?.name || rec.signed_by}
+                        </span>
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3">
+                    <TableCell className="px-3 py-3">
                       <div className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
-                        <span className="max-w-[120px] truncate">
-                          {rec.record_hash.substring(0, 8)}...
-                          {rec.record_hash.substring(56)}
+                        <span className="max-w-[110px] truncate">
+                          {rec.record_hash.substring(0, 6)}...
+                          {rec.record_hash.substring(58)}
                         </span>
                         <motion.button
                           type="button"
@@ -296,26 +302,38 @@ export function GradeTable() {
                         </motion.button>
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3">
+                    <TableCell className="px-3 py-3">
                       <StatusBadge status={status} size="sm" />
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-right">
-                      <motion.div
-                        whileHover={{ y: -1 }}
-                        whileTap={{ y: 0 }}
-                        transition={{ duration: 0.12 }}
-                        className="inline-block"
-                      >
+                    <TableCell className="px-3 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        {/* FR-07: corrections append a new signed block */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setRecordToEdit(rec)}
+                          disabled={isTampered}
+                          title={
+                            isTampered
+                              ? "Flagged records cannot be corrected — investigate the integrity failure first"
+                              : `Issue a signed correction for ${rec.id}`
+                          }
+                          aria-label="Correct grade"
+                          className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-border bg-card p-0 text-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          <PencilSimpleLine className="size-4 text-primary" />
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedRecordForCrypto(rec)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                          aria-label="Inspect cryptographic details"
+                          title="Inspect cryptographic details"
+                          className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-border bg-card p-0 text-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
                         >
-                          <Eye className="size-3 text-primary" />
-                          <span>Inspect</span>
+                          <Eye className="size-4 text-primary" />
                         </Button>
-                      </motion.div>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )

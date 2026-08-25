@@ -69,7 +69,7 @@ export function CryptoModal() {
         if (!open) setSelectedRecordForCrypto(null)
       }}
     >
-      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-none border border-border bg-card p-6 sm:max-w-2xl md:max-w-3xl">
+      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-md border border-border bg-card p-6 sm:max-w-2xl md:max-w-3xl">
         <DialogHeader className="border-b border-border/60 pr-10 pb-3">
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -77,7 +77,7 @@ export function CryptoModal() {
                 <div className="flex size-8 shrink-0 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
                   <Certificate className="size-4" weight="bold" />
                 </div>
-                <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+                <DialogTitle className="text-sm font-semibold tracking-tight text-foreground">
                   Cryptographic Proof Inspector
                 </DialogTitle>
               </div>
@@ -117,7 +117,7 @@ export function CryptoModal() {
                 />
               )}
               <div className="min-w-0 flex-1">
-                <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                <div className="text-[11px] font-semibold uppercase tracking-wider">
                   Content Hash
                 </div>
                 <div className="truncate font-mono text-[11px] font-semibold tracking-tight uppercase opacity-90">
@@ -145,11 +145,11 @@ export function CryptoModal() {
                 />
               )}
               <div className="min-w-0 flex-1">
-                <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
-                  Chain Linkage
+                <div className="text-[11px] font-semibold uppercase tracking-wider">
+                  Hash Chain
                 </div>
                 <div className="truncate font-mono text-[11px] font-semibold tracking-tight uppercase opacity-90">
-                  {v.chain_valid ? "Valid prev_hash Link" : "Broken Sequence"}
+                  {v.chain_valid ? "Continuous Linkage" : "Broken Sequence"}
                 </div>
               </div>
             </div>
@@ -173,8 +173,8 @@ export function CryptoModal() {
                 />
               )}
               <div className="min-w-0 flex-1">
-                <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
-                  RSA Signature
+                <div className="text-[11px] font-semibold uppercase tracking-wider">
+                  Digital Signature
                 </div>
                 <div className="truncate font-mono text-[11px] font-semibold tracking-tight uppercase opacity-90">
                   {v.signature_valid
@@ -187,23 +187,23 @@ export function CryptoModal() {
 
           {/* Tabbed Inspector Navigation - Clean underline tabs without box wrapper */}
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 rounded-none border-b border-border bg-transparent p-0">
+            <TabsList className="grid w-full grid-cols-3 rounded-md border-b border-border bg-transparent p-0">
               <TabsTrigger
                 value="overview"
-                className="h-9 rounded-none border-b-2 border-transparent px-2 py-1.5 text-center font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:text-foreground"
+                className="h-9 rounded-md border-b-2 border-transparent px-2 py-1.5 text-center text-xs font-medium text-muted-foreground transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:font-semibold data-active:text-foreground"
               >
                 <span className="hidden sm:inline">Overview & Data</span>
                 <span className="sm:hidden">Overview</span>
               </TabsTrigger>
               <TabsTrigger
                 value="canonical"
-                className="h-9 rounded-none border-b-2 border-transparent px-2 py-1.5 text-center font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:text-foreground"
+                className="h-9 rounded-md border-b-2 border-transparent px-2 py-1.5 text-center text-xs font-medium text-muted-foreground transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:font-semibold data-active:text-foreground"
               >
                 <span>Canonical JSON</span>
               </TabsTrigger>
               <TabsTrigger
                 value="signature"
-                className="h-9 rounded-none border-b-2 border-transparent px-2 py-1.5 text-center font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:text-foreground"
+                className="h-9 rounded-md border-b-2 border-transparent px-2 py-1.5 text-center text-xs font-medium text-muted-foreground transition-all hover:text-foreground data-active:border-primary data-active:bg-transparent data-active:font-semibold data-active:text-foreground"
               >
                 <span className="hidden sm:inline">RSA-2048 Proof & Key</span>
                 <span className="sm:hidden">RSA Proof</span>
@@ -216,12 +216,12 @@ export function CryptoModal() {
             >
               {/* Academic Entity Details - Clean unboxed metadata grid */}
               <div>
-                <h4 className="mb-2.5 font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                <h4 className="mb-2.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                   Academic Record Data
                 </h4>
                 <div className="grid grid-cols-2 gap-4 bg-muted/20 p-3.5 text-xs sm:grid-cols-4">
                   <div>
-                    <span className="block font-heading text-[11px] tracking-widest text-muted-foreground uppercase">
+                    <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                       Student Name
                     </span>
                     <span className="font-medium text-foreground">
@@ -229,7 +229,7 @@ export function CryptoModal() {
                     </span>
                   </div>
                   <div>
-                    <span className="block font-heading text-[11px] tracking-widest text-muted-foreground uppercase">
+                    <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                       Student ID
                     </span>
                     <span className="font-mono text-xs text-foreground">
@@ -237,7 +237,7 @@ export function CryptoModal() {
                     </span>
                   </div>
                   <div>
-                    <span className="block font-heading text-[11px] tracking-widest text-muted-foreground uppercase">
+                    <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                       Course
                     </span>
                     <span className="font-mono text-xs text-foreground">
@@ -245,7 +245,7 @@ export function CryptoModal() {
                     </span>
                   </div>
                   <div>
-                    <span className="block font-heading text-[11px] tracking-widest text-muted-foreground uppercase">
+                    <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                       Awarded Grade
                     </span>
                     <span className="font-mono text-sm font-bold text-primary">
@@ -259,7 +259,7 @@ export function CryptoModal() {
               <div className="space-y-3 pt-1">
                 <div>
                   <div className="flex items-center justify-between pb-1.5">
-                    <div className="flex items-center gap-1.5 font-heading text-[11px] font-semibold tracking-wider text-primary uppercase">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-primary uppercase">
                       <Hash className="size-3.5" />
                       <span>SHA-256 Record Digest (record_hash)</span>
                     </div>
@@ -269,7 +269,7 @@ export function CryptoModal() {
                       onClick={() =>
                         copyToClipboard(rec.record_hash, "record_hash")
                       }
-                      className="h-6 gap-1 rounded-none px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
+                      className="h-6 gap-1 rounded-md px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
                     >
                       {copiedKey === "record_hash" ? (
                         <Check className="size-3 text-primary" />
@@ -286,7 +286,7 @@ export function CryptoModal() {
 
                 <div>
                   <div className="flex items-center justify-between pb-1.5">
-                    <div className="flex items-center gap-1.5 font-heading text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                       <LinkSimple className="size-3.5 text-primary" />
                       <span>Previous Block Hash (prev_hash)</span>
                     </div>
@@ -296,7 +296,7 @@ export function CryptoModal() {
                       onClick={() =>
                         copyToClipboard(rec.prev_hash, "prev_hash")
                       }
-                      className="h-6 gap-1 rounded-none px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
+                      className="h-6 gap-1 rounded-md px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
                     >
                       {copiedKey === "prev_hash" ? (
                         <Check className="size-3 text-primary" />
@@ -318,7 +318,7 @@ export function CryptoModal() {
               className="mt-4 space-y-2 outline-none"
             >
               <div className="flex items-center justify-between pb-1">
-                <div className="flex items-center gap-1.5 font-heading text-[11px] font-semibold tracking-wider text-foreground uppercase">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-foreground uppercase">
                   <CodeBlock className="size-3.5 text-primary" />
                   <span>Deterministic Canonical Payload</span>
                 </div>
@@ -328,7 +328,7 @@ export function CryptoModal() {
                   onClick={() =>
                     copyToClipboard(canonicalJsonString, "payload")
                   }
-                  className="h-6 gap-1 rounded-none px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
+                  className="h-6 gap-1 rounded-md px-2 font-mono text-[11px] tracking-wider text-muted-foreground uppercase hover:text-foreground"
                 >
                   {copiedKey === "payload" ? (
                     <Check className="size-3 text-primary" />
@@ -348,7 +348,7 @@ export function CryptoModal() {
               className="mt-4 space-y-3 outline-none"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 pb-1">
-                <div className="flex items-center gap-1.5 font-heading text-[11px] font-semibold tracking-wider text-foreground uppercase">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-foreground uppercase">
                   <LockKey className="size-3.5 text-primary" />
                   <span>RSA-2048 Digital Signature</span>
                 </div>

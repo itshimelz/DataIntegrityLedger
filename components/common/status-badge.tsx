@@ -29,7 +29,7 @@ export function StatusBadge({
         <Badge
           variant="outline"
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-none border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-primary uppercase",
+            "inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-primary uppercase",
             size === "sm"
               ? "px-1.5 py-0.5 text-[11px]"
               : "px-2 py-1 text-[11px]",
@@ -59,7 +59,7 @@ export function StatusBadge({
         <Badge
           variant="destructive"
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-none border border-destructive/40 bg-destructive/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-destructive uppercase",
+            "inline-flex items-center gap-1.5 rounded-md border border-destructive/40 bg-destructive/10 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-destructive uppercase",
             size === "sm"
               ? "px-1.5 py-0.5 text-[11px]"
               : "px-2 py-1 text-[11px]",
@@ -90,7 +90,7 @@ export function StatusBadge({
       <Badge
         variant="secondary"
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-none border border-border bg-muted/60 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-muted-foreground uppercase",
+          "inline-flex items-center gap-1.5 rounded-md border border-border bg-muted/60 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-muted-foreground uppercase",
           size === "sm" ? "px-1.5 py-0.5 text-[11px]" : "px-2 py-1 text-[11px]",
           className
         )}

@@ -31,10 +31,10 @@ export function RecentRecords() {
   const recentList = [...records].reverse().slice(0, 5)
 
   return (
-    <Card className="rounded-none border border-border bg-card">
+    <Card className="rounded-md border border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-border/60 pb-4">
         <div>
-          <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+          <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
             Recent Ledger Entries
           </CardTitle>
           <CardDescription className="text-xs text-muted-foreground">
@@ -44,7 +44,7 @@ export function RecentRecords() {
         <motion.div whileHover={{ x: 2 }} whileTap={{ scale: 0.97 }}>
           <Link
             href="/records"
-            className="inline-flex items-center gap-1 font-heading text-xs font-semibold tracking-widest text-primary uppercase transition-colors hover:text-primary/80"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:text-primary/80"
           >
             <span>View All ({records.length})</span>
             <ArrowRight className="size-3.5" />
@@ -135,7 +135,7 @@ export function RecentRecords() {
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedRecordForCrypto(rec)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
                         >
                           <Eye className="size-3 text-primary" />
                           <span>Inspect</span>

@@ -9,7 +9,7 @@ export default function RecordsPage() {
       <div className="space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="font-heading text-xl font-bold tracking-wider text-foreground uppercase md:text-2xl">
+          <h1 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
             Academic Grade Ledger Records
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">

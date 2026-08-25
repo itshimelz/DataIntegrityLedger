@@ -57,18 +57,23 @@ interface LedgerContextType {
   selectedRecordForCrypto: EnrichedGradeRecord | null
   isAddModalOpen: boolean
   isTamperModalOpen: boolean
-  activeSignerId: string
-  setActiveSignerId: (id: string) => void
+  recordToEdit: EnrichedGradeRecord | null
   setSelectedRecordForCrypto: (record: EnrichedGradeRecord | null) => void
   setIsAddModalOpen: (open: boolean) => void
   setIsTamperModalOpen: (open: boolean) => void
+  setRecordToEdit: (record: EnrichedGradeRecord | null) => void
   refreshData: () => Promise<void>
   runVerification: () => Promise<LedgerVerificationReport | null>
   addGradeRecord: (params: {
     student_id: string
     course_id: string
     grade: string
-    faculty_id: string
+    faculty_id?: string
+  }) => Promise<{ success: boolean; record?: GradeRecord; error?: string }>
+  correctGradeRecord: (params: {
+    record_id: string
+    new_grade: string
+    faculty_id?: string
   }) => Promise<{ success: boolean; record?: GradeRecord; error?: string }>
   simulateTamper: (
     target: string,
@@ -100,7 +105,9 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
     useState<EnrichedGradeRecord | null>(null)
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
   const [isTamperModalOpen, setIsTamperModalOpen] = useState<boolean>(false)
-  const [activeSignerId, setActiveSignerId] = useState<string>("fac-mamun-001")
+  const [recordToEdit, setRecordToEdit] = useState<EnrichedGradeRecord | null>(
+    null
+  )
 
   const refreshData = useCallback(async () => {
     try {
@@ -212,7 +219,7 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
       student_id: string
       course_id: string
       grade: string
-      faculty_id: string
+      faculty_id?: string
     }) => {
       try {
         const res = await fetch("/api/grades", {
@@ -229,6 +236,40 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
           return { success: true, record: data.record }
         }
         return { success: false, error: data.error || "Failed to add grade" }
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : "Network error",
+        }
+      }
+    },
+    [refreshData]
+  )
+
+  const correctGradeRecord = useCallback(
+    async (params: {
+      record_id: string
+      new_grade: string
+      faculty_id?: string
+    }) => {
+      try {
+        const res = await fetch("/api/grades", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(params),
+        })
+        const data = await res.json()
+        if (data.success) {
+          setAnnouncement(
+            `Correction block #${data.record?.block_index ?? ""} signed and appended`
+          )
+          await refreshData()
+          return { success: true, record: data.record }
+        }
+        return {
+          success: false,
+          error: data.error || "Failed to correct grade",
+        }
       } catch (err) {
         return {
           success: false,
@@ -315,14 +356,15 @@ export function LedgerProvider({ children }: { children: React.ReactNode }) {
         selectedRecordForCrypto,
         isAddModalOpen,
         isTamperModalOpen,
-        activeSignerId,
-        setActiveSignerId,
+        recordToEdit,
         setSelectedRecordForCrypto,
         setIsAddModalOpen,
         setIsTamperModalOpen,
+        setRecordToEdit,
         refreshData,
         runVerification,
         addGradeRecord,
+        correctGradeRecord,
         simulateTamper,
         resetDemoData,
       }}

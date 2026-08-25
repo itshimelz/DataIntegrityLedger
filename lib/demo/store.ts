@@ -175,6 +175,96 @@ class LedgerStore {
   }
 
   /**
+   * FR-07 Grade Editing: appends a new signed ledger block that corrects an
+   * earlier record's grade. The original block is never mutated — evidence of
+   * the original authenticated entry stays preserved in the chain.
+   */
+  public correctGradeRecord(params: {
+    record_id: string
+    new_grade: string
+    faculty_id: string
+  }): GradeRecord {
+    const original = this.getGradeRecordById(params.record_id)
+    if (!original) {
+      throw new Error(`Grade record not found: ${params.record_id}`)
+    }
+    if (original.grade === params.new_grade) {
+      throw new Error(
+        `New grade must differ from the current recorded grade (${original.grade})`
+      )
+    }
+
+    const faculty = this.getFacultyById(params.faculty_id)
+    if (!faculty) {
+      throw new Error(`Faculty not found: ${params.faculty_id}`)
+    }
+    const privateKey =
+      faculty.private_key || DEMO_FACULTY_KEYS[params.faculty_id]?.privateKey
+    if (!privateKey) {
+      throw new Error(
+        `Signing private key missing for faculty: ${params.faculty_id}`
+      )
+    }
+
+    // Chain onto the current head like any other append
+    const sorted = this.getGradeRecords()
+    const lastRecord = sorted[sorted.length - 1]
+    const block_index = lastRecord ? lastRecord.block_index + 1 : 1
+    const prev_hash = lastRecord ? lastRecord.record_hash : GENESIS_HASH
+    const id = `GR-${String(block_index).padStart(6, "0")}`
+    const created_at = new Date().toISOString()
+
+    const payload: CanonicalRecordPayload = {
+      id,
+      student_id: original.student_id,
+      course_id: original.course_id,
+      grade: params.new_grade,
+      block_index,
+      prev_hash,
+      signed_by: params.faculty_id,
+      created_at,
+      corrects_record_id: original.id,
+    }
+
+    const record_hash = computeRecordHash(payload)
+    const signature = signHash(record_hash, privateKey)
+
+    const record: GradeRecord = {
+      id,
+      student_id: original.student_id,
+      course_id: original.course_id,
+      grade: params.new_grade,
+      block_index,
+      prev_hash,
+      record_hash,
+      signature,
+      signed_by: params.faculty_id,
+      created_at,
+      corrects_record_id: original.id,
+    }
+
+    this.gradeRecords.push(record)
+
+    this.auditEvents.push({
+      id: `evt-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      actor_id: params.faculty_id,
+      action: "GRADE_CORRECTED",
+      target_record_id: id,
+      metadata: {
+        block_index,
+        corrects_record_id: original.id,
+        previous_grade: original.grade,
+        corrected_grade: params.new_grade,
+        student_id: original.student_id,
+        course_id: original.course_id,
+      },
+      created_at: new Date().toISOString(),
+    })
+
+    return record
+  }
+
+  /**
    * Controlled tampering simulation (SRS FR-14):
    * Modifies the stored database grade value without updating the canonical hash or signature.
    */
@@ -260,6 +350,9 @@ class LedgerStore {
         prev_hash: record.prev_hash,
         signed_by: record.signed_by,
         created_at: record.created_at,
+      }
+      if (record.corrects_record_id !== undefined) {
+        payload.corrects_record_id = record.corrects_record_id
       }
 
       const recomputedHash = computeRecordHash(payload)

@@ -77,14 +77,14 @@ export function TamperModal() {
 
   return (
     <Dialog open={isTamperModalOpen} onOpenChange={setIsTamperModalOpen}>
-      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-none border border-destructive/40 bg-card p-6 sm:max-w-lg md:max-w-xl">
+      <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-md border border-destructive/40 bg-card p-6 sm:max-w-lg md:max-w-xl">
         <DialogHeader className="border-b border-border/60 pr-10 pb-3">
           <div className="flex items-center gap-3">
             <div className="flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive/10 text-destructive">
               <Bug className="size-5" weight="bold" />
             </div>
             <div>
-              <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-destructive uppercase">
+              <DialogTitle className="text-sm font-semibold tracking-tight text-destructive">
                 Simulate DB Tampering (SRS FR-14)
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
@@ -117,16 +117,16 @@ export function TamperModal() {
                 <code className="bg-muted px-1 font-mono text-foreground">
                   UPDATE
                 </code>{" "}
-                overwrites data invisibly. In Data Integrity Ledger, the stored SHA-256 hash
-                and RSA signature will immediately detect this modification on
-                verification.
+                overwrites data invisibly. In Data Integrity Ledger, the stored
+                SHA-256 hash and RSA signature will immediately detect this
+                modification on verification.
               </div>
             </div>
           </div>
 
           {/* Target Record Selector */}
           <div>
-            <label className="mb-1.5 block font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+            <label className="mb-1.5 block text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
               Select Ledger Block to Mutate
             </label>
             <Select
@@ -135,7 +135,7 @@ export function TamperModal() {
                 if (typeof val === "string") setSelectedRecordId(val)
               }}
             >
-              <SelectTrigger className="h-10 w-full rounded-none border border-border bg-card px-3 font-sans text-xs text-foreground focus:border-destructive">
+              <SelectTrigger className="h-10 w-full rounded-md border border-border bg-card px-3 font-sans text-xs text-foreground focus:border-destructive">
                 <SelectValue placeholder="Select Record">
                   {(() => {
                     const r =
@@ -170,12 +170,12 @@ export function TamperModal() {
           {/* Tampered Grade Input - Always horizontal layout */}
           {targetRecord && (
             <div className="pt-1">
-              <div className="mb-2 font-heading text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+              <div className="mb-2 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                 Simulated Grade Mutation:
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex flex-1 flex-col bg-muted/40 p-3 text-center">
-                  <div className="flex h-5 items-center justify-center font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                  <div className="flex h-5 items-center justify-center text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                     Original Grade
                   </div>
                   <div className="mt-1 flex h-10 items-center justify-center font-mono text-xl font-bold text-foreground">
@@ -191,7 +191,7 @@ export function TamperModal() {
                 </div>
 
                 <div className="flex flex-1 flex-col bg-destructive/10 p-3 text-center">
-                  <div className="flex h-5 items-center justify-center font-heading text-[11px] font-semibold tracking-widest text-destructive uppercase">
+                  <div className="flex h-5 items-center justify-center text-[11px] font-semibold tracking-wider text-destructive uppercase">
                     Tampered Grade
                   </div>
                   <div className="mt-1 flex h-10 items-center justify-center">
@@ -201,7 +201,7 @@ export function TamperModal() {
                         if (typeof val === "string") setTamperedGrade(val)
                       }}
                     >
-                      <SelectTrigger className="h-10 w-full rounded-none border border-destructive/40 bg-card px-2 font-mono text-sm font-bold text-destructive">
+                      <SelectTrigger className="h-10 w-full rounded-md border border-destructive/40 bg-card px-2 font-mono text-sm font-bold text-destructive">
                         <SelectValue placeholder="Grade">
                           {`Grade ${tamperedGrade}`}
                         </SelectValue>
@@ -226,7 +226,7 @@ export function TamperModal() {
               variant="outline"
               size="sm"
               onClick={() => setIsTamperModalOpen(false)}
-              className="rounded-none border border-border bg-card font-heading text-xs font-semibold tracking-widest text-foreground uppercase hover:bg-muted"
+              className="rounded-md border border-border bg-card text-xs font-semibold text-foreground hover:bg-muted"
             >
               Cancel
             </Button>
@@ -240,10 +240,10 @@ export function TamperModal() {
                   setIsArmed(true)
                 }
               }}
-              className={`rounded-none font-heading text-xs font-semibold tracking-widest uppercase ${
+              className={`rounded-md text-xs font-semibold tracking-wider uppercase ${
                 isArmed
-                  ? "text-destructive-foreground animate-none bg-destructive hover:bg-destructive"
-                  : "text-destructive-foreground bg-destructive hover:bg-destructive/90"
+                  ? "animate-none bg-destructive text-destructive-foreground hover:bg-destructive"
+                  : "bg-destructive text-destructive-foreground hover:bg-destructive/90"
               }`}
             >
               {isSubmitting

@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server"
-import { demoStore } from "@/lib/demo/store"
+import { supabaseLedger } from "@/lib/supabase/ledger"
+import { getAuthenticatedUser } from "@/lib/supabase/server"
 
 export async function POST() {
+  const user = await getAuthenticatedUser()
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Authentication required" },
+      { status: 401 }
+    )
+  }
   try {
-    demoStore.resetDemoData()
+    await supabaseLedger.resetDemoData()
     return NextResponse.json({
       success: true,
       message:
-        "Ledger and demo store successfully reset to initial pristine seed dataset.",
+        "Ledger and Supabase database successfully reset to initial pristine seed dataset.",
     })
   } catch (error) {
     return NextResponse.json(

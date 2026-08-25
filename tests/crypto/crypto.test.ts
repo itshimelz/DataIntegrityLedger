@@ -6,6 +6,7 @@ import {
   DEMO_FACULTY_KEYS,
   FACULTY_ID_MAMUN,
   FACULTY_ID_SHARIFUR,
+  generateFacultyId,
   generateRsaKeyPair,
   GENESIS_HASH,
   hashCanonicalPayload,
@@ -199,5 +200,40 @@ describe("RSA-2048 Digital Signatures & Keys", () => {
     expect(verifySignature(dataHash, "AAAA", "not-a-valid-public-key")).toBe(
       false
     )
+  })
+})
+
+describe("Faculty ID Generation", () => {
+  const existingSeedIds = [
+    "fac-mamun-001",
+    "fac-sharifur-002",
+    "fac-mahbubur-003",
+  ]
+
+  it("generates sequential ID matching fac-<slug>-004 for a new faculty", () => {
+    const id = generateFacultyId("Dr. Ayesha Rahman", existingSeedIds)
+    expect(id).toBe("fac-ayesha-004")
+  })
+
+  it("handles names with initials and titles correctly", () => {
+    expect(generateFacultyId("Prof. Farhana Akter", existingSeedIds)).toBe(
+      "fac-farhana-004"
+    )
+    expect(generateFacultyId("S. H. Mamun", existingSeedIds)).toBe(
+      "fac-mamun-004"
+    )
+    expect(generateFacultyId("Md. Tanvir Islam", existingSeedIds)).toBe(
+      "fac-tanvir-004"
+    )
+  })
+
+  it("increments sequence when higher IDs exist", () => {
+    const ids = [...existingSeedIds, "fac-ayesha-004", "fac-tanvir-005"]
+    expect(generateFacultyId("Dr. Nusrat Jahan", ids)).toBe("fac-nusrat-006")
+  })
+
+  it("handles empty or single-word names cleanly", () => {
+    expect(generateFacultyId("Hasan", existingSeedIds)).toBe("fac-hasan-004")
+    expect(generateFacultyId("", existingSeedIds)).toBe("fac-faculty-004")
   })
 })

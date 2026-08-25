@@ -8,6 +8,7 @@ import { Topbar } from "./topbar"
 import { LedgerProvider, useLedger } from "@/hooks/use-ledger"
 import { CryptoModal } from "@/components/records/crypto-modal"
 import { AddGradeModal } from "@/components/records/add-grade-modal"
+import { EditGradeModal } from "@/components/records/edit-grade-modal"
 import { TamperModal } from "@/components/records/tamper-modal"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -23,7 +24,7 @@ function LedgerErrorBanner() {
     <div className="border-b border-destructive/40 bg-destructive/10">
       <Alert
         variant="destructive"
-        className="mx-auto max-w-7xl rounded-none border-0 bg-transparent p-4"
+        className="mx-auto max-w-7xl rounded-md border-0 bg-transparent p-4"
       >
         <div className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <div className="flex items-start gap-3">
@@ -45,7 +46,7 @@ function LedgerErrorBanner() {
             size="sm"
             onClick={() => refreshData()}
             disabled={loading}
-            className="text-destructive-foreground shrink-0 gap-1.5 self-start bg-destructive hover:bg-destructive/90 sm:self-auto"
+            className="shrink-0 gap-1.5 self-start bg-destructive text-destructive-foreground hover:bg-destructive/90 sm:self-auto"
           >
             <ArrowClockwise
               className={loading ? "size-3.5 animate-spin" : "size-3.5"}
@@ -64,13 +65,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {/* reducedMotion="user" honors prefers-reduced-motion for all JS-driven animation */}
       <MotionConfig reducedMotion="user">
         <TooltipProvider>
-          <SidebarProvider defaultOpen={true}>
+          {/* ponytail: start collapsed as the Supabase-style icon rail */}
+          <SidebarProvider defaultOpen={false}>
             <AppSidebar />
-            <SidebarInset className="flex min-h-screen flex-1 flex-col bg-background">
+            <SidebarInset className="flex min-h-screen max-w-full min-w-0 flex-1 flex-col overflow-x-hidden bg-background">
               <Topbar />
               <LedgerErrorBanner />
               <LedgerAnnouncer />
-              <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 p-6 md:p-8">
+              <main className="mx-auto w-full max-w-7xl min-w-0 flex-1 space-y-6 p-4 sm:p-6 md:p-8">
                 {children}
               </main>
             </SidebarInset>
@@ -78,6 +80,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {/* Global Inspection and Action Modals */}
             <CryptoModal />
             <AddGradeModal />
+            <EditGradeModal />
             <TamperModal />
           </SidebarProvider>
         </TooltipProvider>

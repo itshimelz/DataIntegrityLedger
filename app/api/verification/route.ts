@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { demoStore } from "@/lib/demo/store"
+import { supabaseLedger } from "@/lib/supabase/ledger"
 
 export async function GET() {
   try {
-    const report = demoStore.verifyLedger()
+    const report = await supabaseLedger.verifyLedger()
     return NextResponse.json({
       success: true,
       report,
@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const report = demoStore.verifyLedger()
+    const report = await supabaseLedger.verifyLedger()
     return NextResponse.json({
       success: true,
       report,
@@ -36,3 +36,4 @@ export async function POST() {
     )
   }
 }
+

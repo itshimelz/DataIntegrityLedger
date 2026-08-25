@@ -35,16 +35,16 @@ export function TamperAlert() {
   return (
     <Alert
       variant="destructive"
-      className="rounded-none border-destructive bg-destructive/10 p-5"
+      className="rounded-md border-destructive bg-destructive/10 p-5"
     >
       <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="flex items-start gap-3.5">
-          <div className="text-destructive-foreground flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive">
+          <div className="flex size-9 shrink-0 items-center justify-center border border-destructive/40 bg-destructive text-destructive-foreground">
             <WarningOctagon className="size-5" weight="bold" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <AlertTitle className="font-heading text-sm font-semibold tracking-wider text-destructive uppercase">
+              <AlertTitle className="text-sm font-semibold tracking-tight text-destructive">
                 Integrity Compromised: Unauthorized Database Mutation
               </AlertTitle>
               <span className="border border-destructive/40 bg-destructive/20 px-1.5 py-0.5 font-mono text-[11px] font-bold tracking-widest text-destructive uppercase">
@@ -60,7 +60,7 @@ export function TamperAlert() {
 
             {/* Tampered Record Quick Diagnosis */}
             {targetRecord && (
-              <div className="mt-3 rounded-none border border-destructive/30 bg-card p-3 text-foreground">
+              <div className="mt-3 rounded-md border border-destructive/30 bg-card p-3 text-foreground">
                 <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-destructive">
@@ -110,7 +110,7 @@ export function TamperAlert() {
               variant="destructive"
               size="sm"
               onClick={() => setSelectedRecordForCrypto(targetRecord)}
-              className="text-destructive-foreground inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-none bg-destructive px-3 py-2 font-heading text-xs font-semibold tracking-widest uppercase transition-colors hover:bg-destructive/90 active:translate-y-px"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-md bg-destructive px-3 py-2 text-xs font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90 active:translate-y-px"
             >
               <Eye className="size-3.5" />
               <span>Inspect Proof</span>
@@ -122,7 +122,7 @@ export function TamperAlert() {
             variant="outline"
             size="sm"
             onClick={() => resetDemoData()}
-            className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-none border border-border bg-card px-3 py-2 font-heading text-xs font-semibold tracking-widest text-foreground uppercase transition-colors hover:bg-muted active:translate-y-px"
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted active:translate-y-px"
           >
             <ArrowClockwise className="size-3.5" />
             <span>Reset Demo</span>

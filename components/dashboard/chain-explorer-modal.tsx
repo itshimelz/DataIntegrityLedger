@@ -54,7 +54,7 @@ export function ChainExplorerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="flex max-h-[92vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-none border border-border bg-card p-6 sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
+      <DialogContent className="flex max-h-[92vh] w-full max-w-[calc(100%-2rem)] flex-col overflow-y-auto rounded-md border border-border bg-card p-6 sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
         <DialogHeader className="border-b border-border/60 pr-10 pb-3">
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -63,7 +63,7 @@ export function ChainExplorerModal({
                   <TreeStructure className="size-4" weight="bold" />
                 </div>
                 <div>
-                  <DialogTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+                  <DialogTitle className="text-sm font-semibold tracking-tight text-foreground">
                     Cryptographic Ledger Chain Explorer
                   </DialogTitle>
                   <DialogDescription className="font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
@@ -93,7 +93,7 @@ export function ChainExplorerModal({
           {/* Horizontal Interactive Chain Pipeline */}
           <div className="bg-muted/20 p-4">
             <div className="mb-3 flex items-center justify-between">
-              <span className="font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                 Sequential Block Sequence (Click block to inspect telemetry)
               </span>
               <span className="font-mono text-[11px] text-muted-foreground">
@@ -106,7 +106,7 @@ export function ChainExplorerModal({
                 {/* Genesis State Node */}
                 <div className="flex flex-col items-center">
                   <div className="flex h-20 w-32 flex-col justify-between border border-dashed border-border bg-muted/40 p-2.5 text-center">
-                    <div className="font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                    <div className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                       Genesis #0
                     </div>
                     <div className="font-mono text-[11px] text-muted-foreground">
@@ -200,7 +200,7 @@ export function ChainExplorerModal({
             <div className="space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-2">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-heading text-xs font-semibold tracking-wider text-foreground uppercase">
+                  <h3 className="text-xs font-semibold tracking-tight text-foreground uppercase">
                     Block #{activeRecord.block_index} Telemetry & Cryptographic
                     Verification
                   </h3>
@@ -213,7 +213,7 @@ export function ChainExplorerModal({
                     onClose()
                     setSelectedRecordForCrypto(activeRecord)
                   }}
-                  className="h-7 cursor-pointer gap-1.5 rounded-none border-primary/40 bg-primary/5 px-2.5 font-heading text-[11px] tracking-wider text-primary uppercase hover:bg-primary hover:text-primary-foreground"
+                  className="h-7 cursor-pointer gap-1.5 rounded-md border-primary/40 bg-primary/5 px-2.5 text-xs font-medium text-primary hover:bg-primary hover:text-primary-foreground"
                 >
                   <Certificate className="size-3.5" weight="bold" />
                   Inspect Full Crypto Proof
@@ -241,7 +241,7 @@ export function ChainExplorerModal({
                     />
                   )}
                   <div className="min-w-0 flex-1">
-                    <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider">
                       Content SHA-256
                     </div>
                     <div className="truncate font-mono text-[11px] font-semibold uppercase opacity-90">
@@ -269,7 +269,7 @@ export function ChainExplorerModal({
                     />
                   )}
                   <div className="min-w-0 flex-1">
-                    <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider">
                       Chain Continuity
                     </div>
                     <div className="truncate font-mono text-[11px] font-semibold uppercase opacity-90">
@@ -299,7 +299,7 @@ export function ChainExplorerModal({
                     />
                   )}
                   <div className="min-w-0 flex-1">
-                    <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider">
                       RSA-2048 Signature
                     </div>
                     <div className="truncate font-mono text-[11px] font-semibold uppercase opacity-90">
@@ -315,12 +315,12 @@ export function ChainExplorerModal({
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 {/* Academic Metadata */}
                 <div className="space-y-2 bg-muted/20 p-3.5">
-                  <h4 className="font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                  <h4 className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                     Academic Record Details
                   </h4>
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     <div>
-                      <span className="block font-heading text-[11px] text-muted-foreground uppercase">
+                      <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                         Student
                       </span>
                       <span className="font-medium text-foreground">
@@ -328,7 +328,7 @@ export function ChainExplorerModal({
                       </span>
                     </div>
                     <div>
-                      <span className="block font-heading text-[11px] text-muted-foreground uppercase">
+                      <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                         Student ID
                       </span>
                       <span className="font-mono text-foreground">
@@ -337,7 +337,7 @@ export function ChainExplorerModal({
                       </span>
                     </div>
                     <div>
-                      <span className="block font-heading text-[11px] text-muted-foreground uppercase">
+                      <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                         Course
                       </span>
                       <span className="font-mono text-foreground">
@@ -346,7 +346,7 @@ export function ChainExplorerModal({
                       </span>
                     </div>
                     <div>
-                      <span className="block font-heading text-[11px] text-muted-foreground uppercase">
+                      <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                         Grade Awarded
                       </span>
                       <span className="font-mono text-sm font-bold text-primary">
@@ -358,7 +358,7 @@ export function ChainExplorerModal({
 
                 {/* Cryptographic Linkage Info */}
                 <div className="space-y-2 bg-muted/20 p-3.5">
-                  <h4 className="font-heading text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                  <h4 className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
                     Cryptographic Linkage
                   </h4>
                   <div className="space-y-1.5 font-mono text-[11px]">

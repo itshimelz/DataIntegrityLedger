@@ -1,13 +1,34 @@
 import { NextResponse } from "next/server"
-import { demoStore } from "@/lib/demo/store"
+import { supabaseLedger } from "@/lib/supabase/ledger"
+import { getAuthenticatedUser } from "@/lib/supabase/server"
+import { decryptPrivateKey } from "@/lib/supabase/secretbox"
+
+/**
+ * FR-03/FR-10: a registered faculty member signs with their own key.
+ * The encrypted private key lives in their auth metadata (server-only);
+ * demo faculty keys resolve inside the ledger service as before.
+ */
+function resolveSignerPrivateKey(
+  facultyId: string,
+  user: Awaited<ReturnType<typeof getAuthenticatedUser>>
+): string | undefined {
+  if (!user) return undefined
+  const userFacultyId = (user.user_metadata?.faculty_id as string) || user.id
+  if (facultyId !== userFacultyId && facultyId !== user.id) return undefined
+  const blob = user.user_metadata?.private_key_enc
+  return blob ? decryptPrivateKey(blob) : undefined
+}
 
 export async function GET() {
   try {
-    const rawRecords = demoStore.getGradeRecords()
-    const students = demoStore.getStudents()
-    const courses = demoStore.getCourses()
-    const faculty = demoStore.getFaculty()
-    const auditEvents = demoStore.getAuditEvents()
+    const [rawRecords, students, courses, faculty, auditEvents] =
+      await Promise.all([
+        supabaseLedger.getGradeRecords(),
+        supabaseLedger.getStudents(),
+        supabaseLedger.getCourses(),
+        supabaseLedger.getFaculty(),
+        supabaseLedger.getAuditEvents(),
+      ])
 
     const studentMap = new Map(students.map((s) => [s.id, s]))
     const courseMap = new Map(courses.map((c) => [c.id, c]))
@@ -55,27 +76,91 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+// FR-07 Grade Editing: append-only correction, never an in-place update
+export async function PATCH(req: Request) {
+  // FR-02: authorization enforced server-side — never trust client role claims
+  const user = await getAuthenticatedUser()
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Authentication required" },
+      { status: 401 }
+    )
+  }
   try {
     const body = await req.json()
-    const { student_id, course_id, grade, faculty_id } = body
+    const { record_id, new_grade } = body
+    const faculty_id =
+      body.faculty_id || (user.user_metadata?.faculty_id as string) || user.id
+
+    if (!record_id || !new_grade || !faculty_id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Missing required fields: record_id, new_grade",
+        },
+        { status: 400 }
+      )
+    }
+
+    const corrected = await supabaseLedger.correctGradeRecord({
+      record_id,
+      new_grade,
+      faculty_id,
+      signer_private_key: resolveSignerPrivateKey(faculty_id, user),
+    })
+
+    return NextResponse.json({
+      success: true,
+      record: corrected,
+      message: `Grade correction signed and appended at block #${corrected.block_index}; original block preserved.`,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to create grade correction",
+      },
+      { status: 400 }
+    )
+  }
+}
+
+// ponytail: DELETE intentionally absent — the ledger is append-only by design
+export async function POST(req: Request) {
+  // FR-02: only authenticated faculty sessions may append ledger records
+  const user = await getAuthenticatedUser()
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Authentication required" },
+      { status: 401 }
+    )
+  }
+  try {
+    const body = await req.json()
+    const { student_id, course_id, grade } = body
+    const faculty_id =
+      body.faculty_id || (user.user_metadata?.faculty_id as string) || user.id
 
     if (!student_id || !course_id || !grade || !faculty_id) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Missing required fields: student_id, course_id, grade, faculty_id",
+            "Missing required fields: student_id, course_id, grade",
         },
         { status: 400 }
       )
     }
 
-    const newRecord = demoStore.addGradeRecord({
+    const newRecord = await supabaseLedger.addGradeRecord({
       student_id,
       course_id,
       grade,
       faculty_id,
+      signer_private_key: resolveSignerPrivateKey(faculty_id, user),
     })
 
     return NextResponse.json({
@@ -96,3 +181,4 @@ export async function POST(req: Request) {
     )
   }
 }
+

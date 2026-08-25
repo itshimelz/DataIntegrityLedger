@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server"
-import { demoStore } from "@/lib/demo/store"
+import { supabaseLedger } from "@/lib/supabase/ledger"
+import { getAuthenticatedUser } from "@/lib/supabase/server"
 
 export async function POST(req: Request) {
+  // FR-14: demo-only simulation — still requires an authenticated session
+  const user = await getAuthenticatedUser()
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Authentication required" },
+      { status: 401 }
+    )
+  }
   try {
     const body = await req.json()
     const { target, newGrade } = body
@@ -16,7 +25,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const result = demoStore.tamperRecord(target, newGrade)
+    const result = await supabaseLedger.tamperRecord(target, newGrade)
 
     if (!result.success) {
       return NextResponse.json(

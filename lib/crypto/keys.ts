@@ -27,6 +27,55 @@ export const FACULTY_ID_MAMUN = "fac-mamun-001"
 export const FACULTY_ID_SHARIFUR = "fac-sharifur-002"
 export const FACULTY_ID_MAHBUBUR = "fac-mahbubur-003"
 
+/**
+ * Generates a readable, sequential faculty ID like `fac-mahbubur-003`, `fac-mamun-001`, `fac-sharifur-002`.
+ * Extracts the primary name slug and increments the highest existing sequence number.
+ */
+export function generateFacultyId(
+  name: string,
+  existingIds: string[] = []
+): string {
+  // 1. Clean the name and extract a meaningful slug
+  const titleRegex = /^(dr|prof|professor|mr|mrs|ms|md|mst|engr)\.?\s+/i
+  let cleaned = name.trim().replace(titleRegex, "").trim()
+
+  // Remove leading single-letter initials like "S. H. ", "A. ", "M. "
+  cleaned = cleaned.replace(/^([a-zA-Z]\.?\s+)+/i, "").trim()
+
+  // Extract the first significant name token
+  const words = cleaned.split(/\s+/).filter(Boolean)
+  let baseSlug = (words[0] || "faculty")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+
+  if (!baseSlug) {
+    baseSlug = "faculty"
+  }
+
+  // 2. Find the highest existing sequence number across all existing faculty IDs
+  let maxSeq = 0
+  for (const id of existingIds) {
+    const match = id.match(/(\d+)$/)
+    if (match) {
+      const num = parseInt(match[1], 10)
+      if (!isNaN(num) && num > maxSeq) {
+        maxSeq = num
+      }
+    }
+  }
+
+  let nextSeq = maxSeq + 1
+  let candidate = `fac-${baseSlug}-${String(nextSeq).padStart(3, "0")}`
+
+  // Ensure absolute uniqueness if that exact ID already exists
+  while (existingIds.includes(candidate)) {
+    nextSeq++
+    candidate = `fac-${baseSlug}-${String(nextSeq).padStart(3, "0")}`
+  }
+
+  return candidate
+}
+
 // Pre-generated RSA-2048 keys for deterministic demo seeding
 export const DEMO_FACULTY_KEYS: Record<string, KeyPair> = {
   [FACULTY_ID_MAMUN]: {

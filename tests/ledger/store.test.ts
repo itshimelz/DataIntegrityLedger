@@ -72,6 +72,58 @@ describe("LedgerStore & Demo Flow", () => {
     expect(tamperedIssue?.error).toContain("Content hash mismatch")
   })
 
+  it("FR-07: appends a signed correction block without mutating the original", () => {
+    const original = demoStore.addGradeRecord({
+      student_id: "std-001",
+      course_id: "course-cse208",
+      grade: "B+",
+      faculty_id: FACULTY_ID_SHARIFUR,
+    })
+    const originalHash = original.record_hash
+
+    const corrected = demoStore.correctGradeRecord({
+      record_id: original.id,
+      new_grade: "A-",
+      faculty_id: FACULTY_ID_SHARIFUR,
+    })
+
+    // Correction chains onto the ledger head and references the original
+    expect(corrected.block_index).toBe(original.block_index + 1)
+    expect(corrected.prev_hash).toBe(original.record_hash)
+    expect(corrected.grade).toBe("A-")
+    expect(corrected.corrects_record_id).toBe(original.id)
+
+    // Original authenticated state preserved untouched
+    const storedOriginal = demoStore.getGradeRecordById(original.id)
+    expect(storedOriginal?.grade).toBe("B+")
+    expect(storedOriginal?.record_hash).toBe(originalHash)
+
+    // Full ledger remains fully valid
+    const report = demoStore.verifyLedger()
+    expect(report.status).toBe("VERIFIED")
+    expect(report.invalid).toBe(0)
+  })
+
+  it("FR-07: rejects corrections with the same grade or unknown records", () => {
+    const original = demoStore.getGradeRecords()[0]
+
+    expect(() =>
+      demoStore.correctGradeRecord({
+        record_id: original.id,
+        new_grade: original.grade,
+        faculty_id: FACULTY_ID_SHARIFUR,
+      })
+    ).toThrow("must differ")
+
+    expect(() =>
+      demoStore.correctGradeRecord({
+        record_id: "GR-999999",
+        new_grade: "A",
+        faculty_id: FACULTY_ID_SHARIFUR,
+      })
+    ).toThrow("not found")
+  })
+
   it("resets demo data cleanly back to verified state", () => {
     demoStore.tamperRecord("GR-000001", "A+")
     expect(demoStore.verifyLedger().status).toBe("FLAGGED")

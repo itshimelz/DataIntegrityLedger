@@ -1,4 +1,52 @@
-# dependencies
+# ==============================================================================
+# DATA INTEGRITY LEDGER (DILedger) - .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environment Files & Secrets (High Security)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+.env*.local
+!.env.example
+
+# Cryptographic Keys, Certificates & Private Keypairs
+*.pem
+*.key
+*.pub
+*.cert
+*.crt
+*.pfx
+*.p12
+*id_rsa*
+*id_ed25519*
+*id_ecdsa*
+credentials*
+secrets/
+private_keys/
+
+# ------------------------------------------------------------------------------
+# 2. Documentation & Specifications
+# ------------------------------------------------------------------------------
+docs/
+*.doc
+*.docx
+*.pdf
+Data_Integrity_Ledger_SRS.md
+PRODUCT.md
+AGENTS.md
+product.md
+agents.md
+tasks/
+.agents/
+*.drawio
+*.fig
+*.vsdx
+!README.md
+
+# ------------------------------------------------------------------------------
+# 3. Dependencies & Package Managers
+# ------------------------------------------------------------------------------
 /node_modules
 /.pnp
 .pnp.*
@@ -7,44 +55,85 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+skills-lock.json
 
-# testing
-/coverage
-
-# next.js
+# ------------------------------------------------------------------------------
+# 4. Next.js, Bundlers & Build Outputs
+# ------------------------------------------------------------------------------
 /.next/
 /out/
-
-# production
 /build
+/dist
+.turbo/
 .impeccable
 
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# cloudflare / opennext
+# ------------------------------------------------------------------------------
+# 5. Cloudflare Workers & OpenNext
+# ------------------------------------------------------------------------------
 .open-next/
 .wrangler/
 env.d.ts
 
-# private agent / product docs & tasks
-AGENTS.md
-PRODUCT.md
-agents.md
-product.md
-tasks/
+# ------------------------------------------------------------------------------
+# 6. Database & Supabase Local Artifacts
+# ------------------------------------------------------------------------------
+supabase/.temp/
+supabase/.branches/
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+*.dump
+*.sql.bak
+*.bak
+
+# ------------------------------------------------------------------------------
+# 7. Testing & Code Coverage
+# ------------------------------------------------------------------------------
+/coverage
+*.lcov
+.nyc_output
+
+# ------------------------------------------------------------------------------
+# 8. TypeScript & Cache
+# ------------------------------------------------------------------------------
+*.tsbuildinfo
+next-env.d.ts
+
+# ------------------------------------------------------------------------------
+# 9. Logs & Runtime Diagnostics
+# ------------------------------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun.report
+
+# ------------------------------------------------------------------------------
+# 10. Operating System & Editor Files
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE & Editor configurations
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+
+

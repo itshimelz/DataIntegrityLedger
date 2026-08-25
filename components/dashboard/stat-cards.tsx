@@ -51,11 +51,11 @@ export function StatCards() {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {/* Metric 1: Total Records (Informational - No hover/motion) */}
       <div className="h-full">
-        <Card className="flex h-full flex-col justify-between rounded-none border border-border bg-card">
+        <Card className="flex h-full flex-col justify-between rounded-md border border-border bg-card">
           <CardContent className="flex flex-1 flex-col justify-between p-5">
             <div>
               <div className="flex items-center justify-between">
-                <span className="font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Total Records
                 </span>
                 <div className="flex size-8 items-center justify-center border border-border bg-muted/50 text-foreground">
@@ -63,7 +63,7 @@ export function StatCards() {
                 </div>
               </div>
               <div className="mt-3 flex h-9 items-baseline gap-2">
-                <span className="font-serif text-3xl font-bold tracking-tight text-foreground">
+                <span className="text-3xl font-bold tracking-tight text-foreground">
                   {loading ? "..." : totalRecords}
                 </span>
                 <span className="font-mono text-xs text-muted-foreground">
@@ -80,11 +80,11 @@ export function StatCards() {
 
       {/* Metric 2: Verified Blocks (Informational - No hover/motion) */}
       <div className="h-full">
-        <Card className="flex h-full flex-col justify-between rounded-none border border-border bg-card">
+        <Card className="flex h-full flex-col justify-between rounded-md border border-border bg-card">
           <CardContent className="flex flex-1 flex-col justify-between p-5">
             <div>
               <div className="flex items-center justify-between">
-                <span className="font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Verified Blocks
                 </span>
                 <div className="flex size-8 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
@@ -92,7 +92,7 @@ export function StatCards() {
                 </div>
               </div>
               <div className="mt-3 flex h-9 items-baseline gap-2">
-                <span className="font-serif text-3xl font-bold tracking-tight text-primary">
+                <span className="text-3xl font-bold tracking-tight text-primary">
                   {loading
                     ? "..."
                     : (validCount ?? (
@@ -118,7 +118,7 @@ export function StatCards() {
       {/* Metric 3: Discrepancies Detected (Informational - No hover/motion) */}
       <div className="h-full">
         <Card
-          className={`flex h-full flex-col justify-between rounded-none border ${
+          className={`flex h-full flex-col justify-between rounded-md border ${
             isTampered
               ? "border-destructive/50 bg-destructive/5"
               : "border-border bg-card"
@@ -127,7 +127,7 @@ export function StatCards() {
           <CardContent className="flex flex-1 flex-col justify-between p-5">
             <div>
               <div className="flex items-center justify-between">
-                <span className="font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Discrepancies
                 </span>
                 <div
@@ -145,7 +145,7 @@ export function StatCards() {
               </div>
               <div className="mt-3 flex h-9 items-baseline gap-2">
                 <span
-                  className={`font-serif text-3xl font-bold tracking-tight ${
+                  className={`text-3xl font-bold tracking-tight ${
                     isTampered ? "text-destructive" : "text-foreground"
                   }`}
                 >
@@ -177,11 +177,11 @@ export function StatCards() {
 
       {/* Metric 4: Head Record Hash (Interactive Controls Only) */}
       <div className="h-full">
-        <Card className="flex h-full flex-col justify-between rounded-none border border-border bg-card">
+        <Card className="flex h-full flex-col justify-between rounded-md border border-border bg-card">
           <CardContent className="flex flex-1 flex-col justify-between p-5">
             <div>
               <div className="flex items-center justify-between">
-                <span className="font-heading text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Ledger Head Digest
                 </span>
                 <Popover>
@@ -205,10 +205,10 @@ export function StatCards() {
                   <PopoverContent
                     side="bottom"
                     align="end"
-                    className="w-80 rounded-none border border-border bg-card p-4"
+                    className="w-80 rounded-md border border-border bg-card p-4"
                   >
                     <PopoverHeader>
-                      <PopoverTitle className="font-heading text-xs tracking-wider text-foreground uppercase">
+                      <PopoverTitle className="text-xs font-semibold tracking-tight text-foreground">
                         Current Head Block
                       </PopoverTitle>
                       <PopoverDescription className="text-xs text-muted-foreground">
@@ -217,7 +217,7 @@ export function StatCards() {
                     </PopoverHeader>
                     <div className="mt-3 space-y-2 text-xs">
                       <div>
-                        <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
+                        <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                           Block Index & ID
                         </span>
                         <span className="font-mono text-xs text-foreground">
@@ -225,7 +225,7 @@ export function StatCards() {
                         </span>
                       </div>
                       <div>
-                        <span className="block font-heading text-[11px] tracking-wider text-muted-foreground uppercase">
+                        <span className="block text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
                           Full SHA-256 Digest
                         </span>
                         <span className="font-mono text-[11px] break-all text-primary select-all">

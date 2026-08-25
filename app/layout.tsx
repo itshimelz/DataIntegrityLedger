@@ -29,6 +29,7 @@ export const metadata: Metadata = {
 
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
+import { AuthProvider } from "@/hooks/use-auth"
 
 export default function RootLayout({
   children,
@@ -48,8 +49,10 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <ThemeProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-          <Toaster />
+          <AuthProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

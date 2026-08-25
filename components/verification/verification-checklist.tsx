@@ -16,9 +16,9 @@ export function VerificationChecklist() {
   const { records, setSelectedRecordForCrypto } = useLedger()
 
   return (
-    <Card className="rounded-none border border-border bg-card">
+    <Card className="rounded-md border border-border bg-card">
       <CardHeader className="border-b border-border/60 pb-4">
-        <CardTitle className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase">
+        <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
           Sequential Block Audit Checklist
         </CardTitle>
         <CardDescription className="text-xs text-muted-foreground">
@@ -41,7 +41,7 @@ export function VerificationChecklist() {
           return (
             <div
               key={rec.id}
-              className={`rounded-none border p-4 transition-all ${
+              className={`rounded-md border p-4 transition-all ${
                 isTampered
                   ? "border-destructive/60 bg-destructive/10"
                   : "border-border bg-card hover:bg-muted/20"
@@ -53,7 +53,7 @@ export function VerificationChecklist() {
                   <div
                     className={`flex size-9 shrink-0 items-center justify-center border font-mono text-xs font-semibold ${
                       isTampered
-                        ? "text-destructive-foreground border-destructive/40 bg-destructive"
+                        ? "border-destructive/40 bg-destructive text-destructive-foreground"
                         : "border-primary/30 bg-primary/10 text-primary"
                     }`}
                   >
@@ -112,7 +112,7 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider">
                         1. SHA-256 Digest
                       </div>
                       <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
@@ -141,7 +141,7 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider">
                         2. Chain Linkage
                       </div>
                       <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
@@ -170,7 +170,7 @@ export function VerificationChecklist() {
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="font-heading text-[11px] font-semibold tracking-wider uppercase">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider">
                         3. RSA-2048 Sign
                       </div>
                       <div className="truncate font-mono text-[11px] tracking-tight uppercase opacity-80">
@@ -186,7 +186,7 @@ export function VerificationChecklist() {
                   <button
                     type="button"
                     onClick={() => setSelectedRecordForCrypto(rec)}
-                    className="inline-flex cursor-pointer items-center gap-1 rounded-none border border-border bg-card px-2.5 py-1.5 font-heading text-[11px] font-semibold tracking-widest text-foreground uppercase transition-colors hover:bg-muted"
+                    className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
                   >
                     <Eye className="size-3 text-primary" />
                     <span>Inspect</span>
