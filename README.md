@@ -7,6 +7,8 @@
 Traditional databases ask: *"Was this user authorized to modify the row?"*  
 The Data Integrity Ledger additionally asks: ***"Does the current database record still match the cryptographically authenticated record?"***
 
+![Dashboard Overview](docs/screenshots/dashboard.png)
+
 ---
 
 ## Key Features
@@ -19,6 +21,61 @@ The Data Integrity Ledger additionally asks: ***"Does the current database recor
 - **Controlled Tampering Simulation**: Live demonstration portal to simulate direct database-level tampering and observe immediate detection.
 - **Registrar Portal UI**: Clean, academic-inspired interface designed with shadcn/ui, warm surfaces, dark forest navigation, and accessible VERIFIED / FLAGGED status indicators.
 - **Cloudflare Workers Ready**: Configured for edge deployment on Cloudflare Workers using OpenNext with `nodejs_compat` support.
+
+---
+
+## UI Showcase
+
+### 1. Registrar Dashboard & Chain Health
+The centralized command center for monitoring the ledger sequence, chain height, verified blocks, and recent grade submissions.
+
+![Registrar Dashboard](docs/screenshots/dashboard.png)
+
+---
+
+### 2. Real-Time Cryptographic Verification Engine
+An automated three-stage audit scanner that independently reconstructs canonical payloads, recalculates SHA-256 digests, verifies `prev_hash` chain linkage, and validates RSA-2048 signatures.
+
+![Cryptographic Verification Report](docs/screenshots/verify.png)
+
+---
+
+### 3. Grade Records Browser & Audit Trail
+Search, filter, and inspect immutable grade blocks with signer attributions and block indices.
+
+![Grade Records Browser](docs/screenshots/records.png)
+
+---
+
+### 4. Cryptographic Proof Inspector
+Inspect the canonical JSON payload, stored vs computed SHA-256 hash digests, and RSA-2048 faculty signature verification for any block.
+
+![Cryptographic Proof Inspector](docs/screenshots/crypto-inspector.png)
+
+---
+
+### 5. Tamper Simulation & Detection
+Simulate unauthorized direct database updates (bypassing application logic) and observe immediate tamper alerts and broken chain detection across the entire ledger.
+
+| Tamper Alert on Dashboard | Verification Breakdown with Flagged Violation |
+| :---: | :---: |
+| ![Tamper Alert](docs/screenshots/tamper-alert.png) | ![Verify Tamper Detected](docs/screenshots/verify-tamper-detected.png) |
+
+---
+
+### 6. Applications Beyond Grades
+Explore how the same SHA-256 hash chaining and RSA signature architecture applies to transcripts & degrees, clinical research data, medical records, supply chains, and land registries.
+
+![Applications Beyond Grades](docs/screenshots/applications.png)
+
+---
+
+### 7. Landing Page & Faculty Authentication
+Modern landing page and faculty portal with automated RSA-2048 keypair generation and credential provisioning.
+
+| Landing Page | Faculty Login & Key Provisioning |
+| :---: | :---: |
+| ![Landing Page](docs/screenshots/landing.png) | ![Faculty Authentication](docs/screenshots/login.png) |
 
 ---
 
