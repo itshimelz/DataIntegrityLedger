@@ -29,6 +29,10 @@ jobs:
 
       - name: Build OpenNext Worker
         run: bun run build:worker
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          LEDGER_SIGNING_KEY: ${{ secrets.LEDGER_SIGNING_KEY }}
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3

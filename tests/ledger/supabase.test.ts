@@ -2,7 +2,14 @@ import { describe, expect, it } from "bun:test"
 import { FACULTY_ID_SHARIFUR } from "../../lib/crypto"
 import { supabaseLedger } from "../../lib/supabase/ledger"
 
-describe("SupabaseLedgerService", () => {
+const hasSupabase =
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+  Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  )
+
+describe.skipIf(!hasSupabase)("SupabaseLedgerService", () => {
   it("fetches initial seed records and runs verification on Supabase", async () => {
     await supabaseLedger.resetDemoData()
     const records = await supabaseLedger.getGradeRecords()
